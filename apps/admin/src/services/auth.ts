@@ -36,19 +36,6 @@ export const registerUser = async (
 
     // redis.set('user', JSON.stringify(user));
 
-    const cronTask = async () => {
-      console.info('executing cron job at ', new Date(Date.now()));
-    };
-    console.info('user name ', user.name);
-
-    console.info('user ', user);
-
-    const cronJobEvery2Seconds = scheduleCronJob('*/3 * * * * *', cronTask);
-    setTimeout(() => {
-      cronJobEvery2Seconds.stop();
-      logger.info('Cron job stopped successfully');
-    }, 12001);
-
     return { user };
   } catch (error) {
     throw error instanceof Error

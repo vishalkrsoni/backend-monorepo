@@ -3,18 +3,13 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import express, { Express, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import {
-  logger,
-  checkNetworkConnection,
-  mongoConnect,
-} from '@backend-monorepo/common';
+import { logger, mongoConnect } from '@backend-monorepo/common';
 import { adminRoutes } from './routers';
 
 const { ADMIN_PORT, DB_NAME, MONGO_URL, SENTRY_DSN } = process.env;
 
 const app: Express = express();
 
-checkNetworkConnection();
 mongoConnect(DB_NAME, MONGO_URL);
 
 // sentry initialization from here
@@ -32,11 +27,14 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
-app.use(cookieParser()).use(express.json()).use(cors()).use(adminRoutes);
+app.use(cookieParser());
+app.use(express.json());
+app.use(cors());
+app.use(adminRoutes);
 
 app.use(Sentry.Handlers.errorHandler());
 
-app.use(function onError(err: Error, req, res, next: NextFunction) {
+app.use(function onError(err: Error, req: any, res: any, next: NextFunction) {
   console.log(req);
   res.statusCode = 500;
   next(err);
@@ -45,7 +43,7 @@ app.use(function onError(err: Error, req, res, next: NextFunction) {
 
 app
   .listen(ADMIN_PORT, () => {
-    logger.info(`Admin-service started successfully`);
+    logger.info(`Admin started successfully`);
     logger.debug(`Base_URL : http://localhost:${ADMIN_PORT}`);
   })
   .on('error', logger.error);

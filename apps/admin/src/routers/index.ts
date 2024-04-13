@@ -11,11 +11,10 @@ import { userRouter } from './user';
 export const adminRoutes = Router();
 
 // Mount individual routers onto the main router
-adminRoutes
-  .use('/', authRouter)
-  .use('/', schoolRouter)
-  .use('/', otpRouter)
-  .use('/', classRouter)
-  .use('/', classScheduleRouter)
-  .use('/', subjectRouter)
-  .use('/', userRouter);
+adminRoutes.use('/', authRouter);
+adminRoutes.use('/', schoolRouter);
+adminRoutes.use('/', otpRouter);
+adminRoutes.use('/', classRouter);
+adminRoutes.use('/', classScheduleRouter);
+adminRoutes.use('/', subjectRouter);
+adminRoutes.use('/', userRouter);

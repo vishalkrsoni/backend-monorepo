@@ -28,7 +28,7 @@ const UserSchema = new Schema(
     userType: {
       type: String,
       required: true,
-      enum: ['Student', 'Admin', 'Parent', 'Teacher','Super_Admin'],
+      enum: ['Student', 'Admin', 'Parent', 'Teacher', 'Super_Admin'],
     },
     userRoles: [
       {
@@ -50,7 +50,7 @@ const UserSchema = new Schema(
     },
   },
 
-  { timestamps: true }
+  { timestamps: true },
 );
 
 UserSchema.pre('save', async function (next) {
@@ -66,7 +66,7 @@ UserSchema.pre('save', async function (next) {
         model = Parent;
         break;
       case 'Admin':
-        case 'Super_Admin':
+      case 'Super_Admin':
         model = Admin;
         break;
       case 'Teacher':
@@ -79,8 +79,8 @@ UserSchema.pre('save', async function (next) {
     const newUser = await model.create({ name, userName, userType });
     this.userInfo = newUser._id;
     logger.debug(`Created new entry for ${userType}: ${userName}`);
-
-    this.set('userRoles', [userType]);
+    if (userType === 'Super_Admin') this.set('userRoles', [userType, 'Admin']);
+    else this.set('userRoles', [userType]);
 
     next();
   } catch (error) {
