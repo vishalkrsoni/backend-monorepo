@@ -38,7 +38,7 @@ export class StudentService extends BaseUserService<iStudent> {
     if (!studentWithParentInfo) throw new Error('Student not found');
 
     const parentIds = studentWithParentInfo.parents.map(
-      (parent: any) => parent._id
+      (parent: any) => parent._id,
     );
     //  why ??
     await this.parentService.model.find({

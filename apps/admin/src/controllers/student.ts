@@ -35,13 +35,13 @@ export class StudentController extends BaseController<StudentService> {
     try {
       const updatedStudent = await this.service.addParentByStudentId(
         studentId,
-        parentId
+        parentId,
       );
       res.json(
         APIResponse.success(
           updatedStudent,
-          'parent added successfully to student'
-        )
+          'parent added successfully to student',
+        ),
       );
     } catch (error) {
       res.status(500).json(APIResponse.internalServerError(error.message));
@@ -54,7 +54,7 @@ export class StudentController extends BaseController<StudentService> {
       const parents = await this.service.findParentsByStudentId(studentId);
 
       res.json(
-        APIResponse.success(parents, 'parent data fetched successfully')
+        APIResponse.success(parents, 'parent data fetched successfully'),
       );
     } catch (error) {
       res.status(500).json(APIResponse.internalServerError(error.message));

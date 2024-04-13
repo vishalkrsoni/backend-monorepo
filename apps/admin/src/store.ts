@@ -50,8 +50,8 @@ export const redisCacheInstance = createRedisCacheClient(
     REDIS_URL,
     REDIS_PORT,
     REDIS_URL_LOCAL,
-    REDIS_PORT_LOCAL
-  )
+    REDIS_PORT_LOCAL,
+  ),
 );
 
 export const redisPubSubInstance = initializeRedisPubSub({

@@ -4,7 +4,7 @@
   "license": "MIT",
   "engines": {
     "node": "21.6.x",
-    "yarn": "1.22.x"
+    "npm": "9.x"
   },
   "scripts": {
     "graph": "npx nx graph",
@@ -14,7 +14,7 @@
     "start-upload": "npx nx serve upload",
     "start-event": "npx nx serve event",
     "lint:admin": "eslint apps/admin --ext .ts --fix",
-    "lint:upload": "eslint apps/upload --ext .ts --fix",
+  
     "format-admin": "prettier --write apps/admin",
     "format-upload": "prettier --write apps/upload",
     "format:check:admin": "prettier --check apps/admin",

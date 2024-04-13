@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response) => {
       name,
       userName,
       password,
-      userType
+      userType,
     );
 
     const eventType = userType.toUpperCase() + '_CREATE';
@@ -33,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
     await publishMessageToQueue(
       redisPubSubInstance,
       'auth-queue',
-      JSON.stringify(newEvent)
+      JSON.stringify(newEvent),
     );
 
     res
@@ -43,7 +43,7 @@ export const register = async (req: Request, res: Response) => {
     res
       .status(INTERNAL_SERVER_ERROR)
       .json(
-        APIResponse.internalServerError('Internal server error', error.message)
+        APIResponse.internalServerError('Internal server error', error.message),
       );
   }
 };
@@ -63,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
     const token = generateAccessToken(
       tokenData,
       JWT_SECRET_KEY,
-      ACCESS_TOKEN_VALIDITY
+      ACCESS_TOKEN_VALIDITY,
     );
 
     const newEvent = {
@@ -80,8 +80,8 @@ export const login = async (req: Request, res: Response) => {
       .json(
         APIResponse.success(
           { userId: user._id, userName, token },
-          'Login successful'
-        )
+          'Login successful',
+        ),
       );
   } catch (error) {
     res
@@ -93,7 +93,7 @@ export const login = async (req: Request, res: Response) => {
 export const generateAccessToken = (
   tokenData: any,
   secretKey: string,
-  tokenExpiry: string
+  tokenExpiry: string,
 ) => {
   return jwt.sign({ ...tokenData }, secretKey, {
     expiresIn: tokenExpiry,

@@ -13,7 +13,7 @@ export const registerUser = async (
   userName: string,
   password: string,
   userType: string,
-  age?: number
+  age?: number,
 ) => {
   try {
     const existingUser = await User.findOne({ userName });
@@ -56,7 +56,7 @@ export const registerUser = async (
       : generateNewError(
           HTTPStatusCodes.INTERNAL_SERVER_ERROR,
           'Internal server error',
-          error
+          error,
         );
   }
 };
@@ -78,7 +78,7 @@ export const loginUser = async (userName: string, password: string) => {
       : generateNewError(
           HTTPStatusCodes.INTERNAL_SERVER_ERROR,
           'Internal server error',
-          error
+          error,
         );
   }
 };

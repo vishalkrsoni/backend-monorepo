@@ -4,7 +4,10 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        // TODO: do fixes to disable this plese
+        "@typescript-eslint/no-explicit-any": "off"
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],

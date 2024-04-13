@@ -25,8 +25,8 @@ export class OTPController {
         .json(
           APIResponse.internalServerError(
             'Internal server error',
-            error.message
-          )
+            error.message,
+          ),
         );
     }
   }
@@ -50,8 +50,8 @@ export class OTPController {
           .json(
             APIResponse.badRequest(
               'Provided OTP is either Expired or Invalid. Generate new OTP ',
-              error.message
-            )
+              error.message,
+            ),
           );
       } else {
         res
@@ -59,8 +59,8 @@ export class OTPController {
           .json(
             APIResponse.internalServerError(
               'Internal server error',
-              error.message
-            )
+              error.message,
+            ),
           );
       }
     }

@@ -4,19 +4,19 @@ import { schoolController } from '../store';
 
 export const schoolRouter = Router();
 
-schoolRouter.use(isAuthentic).use(verifyRole('admin'));
+schoolRouter.use(isAuthentic).use(verifyRole('Admin'));
 
 schoolRouter.post('/school', schoolController.addSchool.bind(schoolController));
 schoolRouter.get('/school', schoolController.getAll.bind(schoolController));
 schoolRouter.get(
   '/school/:id',
-  schoolController.getById.bind(schoolController)
+  schoolController.getById.bind(schoolController),
 );
 schoolRouter.put(
   '/school/:id',
-  schoolController.updateById.bind(schoolController)
+  schoolController.updateById.bind(schoolController),
 );
 schoolRouter.delete(
   '/school/:id',
-  schoolController.deleteById.bind(schoolController)
+  schoolController.deleteById.bind(schoolController),
 );

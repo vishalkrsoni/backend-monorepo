@@ -24,7 +24,7 @@ authRouter.get(
       status: 'success',
       data: req.user,
     });
-  }
+  },
 );
 
 // Sample use of middleware in an Express route
@@ -35,5 +35,5 @@ authRouter.get(
   (req: CustomRequest, res) => {
     // Access device information from req.deviceInfo and location information from req.locationInfo
     res.json({ deviceInfo: req.deviceInfo, locationInfo: req.locationInfo });
-  }
+  },
 );

@@ -12,7 +12,7 @@ export class SubjectController extends BaseController<SubjectService> {
     try {
       const newSubject = await subjectService.addSubject(name);
       res.json(
-        APIResponse.success(newSubject, 'added new subject successfully to db')
+        APIResponse.success(newSubject, 'added new subject successfully to db'),
       );
       console.log(newSubject);
     } catch (error) {

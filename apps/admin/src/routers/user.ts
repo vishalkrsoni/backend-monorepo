@@ -11,7 +11,7 @@ userRouter.get('/user', userController.getAll.bind(userController));
 
 userRouter.get(
   '/user/attribute',
-  userController.getByAttribute.bind(userController)
+  userController.getByAttribute.bind(userController),
 );
 
 userRouter.get('/user/:id', userController.getById.bind(userController));

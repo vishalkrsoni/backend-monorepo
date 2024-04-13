@@ -15,7 +15,7 @@ export class ParentService extends BaseUserService<iParent> {
       return await this.model.findOne({ userName }).exec();
     } catch (error) {
       throw new Error(
-        `Error while retrieving parent with username ${userName}: ${error.message}`
+        `Error while retrieving parent with username ${userName}: ${error.message}`,
       );
     }
   }
@@ -25,7 +25,7 @@ export class ParentService extends BaseUserService<iParent> {
       return await this.model.findOne({ [attribute]: value }).exec();
     } catch (error) {
       throw new Error(
-        `Error while retrieving parent by attribute ${attribute} with value ${value}: ${error.message}`
+        `Error while retrieving parent by attribute ${attribute} with value ${value}: ${error.message}`,
       );
     }
   }
@@ -35,7 +35,7 @@ export class ParentService extends BaseUserService<iParent> {
       return await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
     } catch (error) {
       throw new Error(
-        `Error while updating parent with ID ${id}: ${error.message}`
+        `Error while updating parent with ID ${id}: ${error.message}`,
       );
     }
   }
@@ -45,7 +45,7 @@ export class ParentService extends BaseUserService<iParent> {
       await this.model.findByIdAndDelete(id).exec();
     } catch (error) {
       throw new Error(
-        `Error while deleting parent with ID ${id}: ${error.message}`
+        `Error while deleting parent with ID ${id}: ${error.message}`,
       );
     }
   }
@@ -62,7 +62,7 @@ export class ParentService extends BaseUserService<iParent> {
       return parent.students;
     } catch (error) {
       throw new Error(
-        `Error while retrieving children for parent with ID ${parentId}: ${error.message}`
+        `Error while retrieving children for parent with ID ${parentId}: ${error.message}`,
       );
     }
   }

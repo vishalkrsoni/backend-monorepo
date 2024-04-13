@@ -11,7 +11,7 @@ export class UserService extends BaseUserService<iUser> {
         .find()
         .populate(
           'userInfo',
-          '-_id -name -userName -userType -createdAt -updatedAt -__v'
+          '-_id -name -userName -userType -createdAt -updatedAt -__v',
         );
     } catch (error) {
       console.error('Error occurred while fetching users:', error);

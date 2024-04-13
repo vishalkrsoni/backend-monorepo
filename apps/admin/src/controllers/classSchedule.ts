@@ -13,10 +13,10 @@ export class ClassScheduleController extends BaseController<ClassScheduleService
     try {
       const newClassSchedule = await classScheduleService.addClassSchedule(
         className,
-        schedule
+        schedule,
       );
       res.json(
-        APIResponse.success(newClassSchedule, 'added new classSchedule')
+        APIResponse.success(newClassSchedule, 'added new classSchedule'),
       );
       console.log(newClassSchedule);
     } catch (error) {
