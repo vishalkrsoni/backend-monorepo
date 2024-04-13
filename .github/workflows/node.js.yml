@@ -22,15 +22,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
-      - name: Format and start admin and user services
+      - name: Format and start admin and upload services
         run: |
-          npm run format:admin &
-          npm run format:user &
-          npm run start:admin &
-          npm run start:user &
+          npx nx reset
+          npx nx run-many --target=build
+          yarn format-admin &
+          yarn format-upload &
+          yarn start-admin &
+          yarn start-upload &
           wait

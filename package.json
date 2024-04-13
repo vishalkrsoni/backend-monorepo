@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start:admin": "npx nx serve admin",
-    "start:user": "npx nx serve user",
+    "start-admin": "npx nx serve admin",
+    "start-upload": "npx nx serve upload",
     "lint:admin": "eslint apps/admin --ext .ts --fix",
-    "lint:user": "eslint apps/user --ext .ts --fix",
-    "format:admin": "prettier --write apps/admin",
-    "format:user": "prettier --write apps/user",
+    "lint:upload": "eslint apps/upload --ext .ts --fix",
+    "format-admin": "prettier --write apps/admin",
+    "format-upload": "prettier --write apps/upload",
     "format:check:admin": "prettier --check apps/admin",
-    "format:check:user": "prettier --check apps/user"
+    "format:check:upload": "prettier --check apps/upload"
   },
   "private": true,
   "dependencies": {
