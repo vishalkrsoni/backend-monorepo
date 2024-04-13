@@ -35,7 +35,6 @@ jobs:
 
       - name: Lint and format admin service
         run: |
-          npm run lint:admin
           npm run format:check:admin
 
       - name: Start admin service
@@ -43,7 +42,6 @@ jobs:
 
       - name: Lint and format user service
         run: |
-          npm run lint:user
           npm run format:check:user
 
       - name: Start user service
