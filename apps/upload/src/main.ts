@@ -1,21 +1,22 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import express from 'express';
-import * as path from 'path';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import {
+  checkNetworkConnection,
+  logger,
+  mongoConnect,
+} from '@backend-monorepo/common';
 
+import { userRoutes } from './routes';
+const { DB_NAME, MONGO_URL, USER_PORT } = process.env;
 const app = express();
+checkNetworkConnection();
+mongoConnect(DB_NAME, MONGO_URL);
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use(cookieParser()).use(express.json()).use(cors()).use(userRoutes);
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to upload!' });
-});
-
-const port = process.env.PORT || 8083;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
+app
+  .listen(USER_PORT, () =>
+    logger.info(`User-service started : http://localhost:${USER_PORT}`)
+  )
+  .on('error', logger.error);

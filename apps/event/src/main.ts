@@ -1,21 +1,40 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import express from 'express';
-import * as path from 'path';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import { router } from './routes/email';
 
+import {
+  logger,
+  mongoConnect,
+  listenToRedisQueue,
+  checkNetworkConnection,
+} from '@backend-monorepo/common';
+import { redisPubSubInstance } from './store';
+import { handleIncomingRedisEvent } from './utils/handleredis';
+
+const { MONGO_URL, DB_NAME, EVENT_HANDLER_PORT } = process.env;
 const app = express();
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+checkNetworkConnection();
+mongoConnect(DB_NAME, MONGO_URL);
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to event!' });
-});
+app.use(cookieParser()).use(express.json()).use(cors()).use(router);
 
-const port = process.env.PORT || 8081;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
+// listenToKafkaTopic('USER_CREATE');
+
+// listening and handling redis events using callback function
+listenToRedisQueue(redisPubSubInstance, 'auth-queue', handleIncomingRedisEvent)
+  .then(() => {
+    logger.info('Listening to Redis : auth-queue');
+  })
+  .catch((error) => {
+    logger.error('Error:', error);
+  });
+
+app
+  .listen(EVENT_HANDLER_PORT, () =>
+    logger.info(
+      `event-handler started : http://localhost:${EVENT_HANDLER_PORT}`
+    )
+  )
+  .on('error', logger.error);
