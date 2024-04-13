@@ -9,6 +9,8 @@ export const verifyRole = (...roles: string[]) => {
       const userRoles = req.user.roles;
       console.log('roles:', req.user.roles);
       const hasRequiredRole = roles.some((role) => userRoles.includes(role));
+      console.log('from token', userRoles);
+      console.log('from input', roles);
 
       if (hasRequiredRole) {
         next();

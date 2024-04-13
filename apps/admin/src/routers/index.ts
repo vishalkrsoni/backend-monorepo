@@ -13,9 +13,9 @@ export const adminRoutes = Router();
 // Mount individual routers onto the main router
 adminRoutes
   .use('/', authRouter)
+  .use('/', schoolRouter)
   .use('/', otpRouter)
   .use('/', classRouter)
   .use('/', classScheduleRouter)
   .use('/', subjectRouter)
-  .use('/', schoolRouter)
   .use('/', userRouter);

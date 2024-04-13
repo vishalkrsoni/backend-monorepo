@@ -9,9 +9,8 @@ export class ClassController extends BaseController<ClassService> {
   }
 
   async addClass(req: Request, res: Response) {
-    const { className } = req.body;
     try {
-      const newClass = await classService.addClass(className);
+      const newClass = await classService.addClass(req.body);
       res.json(APIResponse.success(newClass, 'Added new class successfully'));
     } catch (error) {
       console.error('Error adding class:', error.message);

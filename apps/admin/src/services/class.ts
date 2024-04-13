@@ -6,9 +6,9 @@ export class ClassService extends BaseUserService<iClass> {
     super(Class);
   }
 
-  async addClass(className: string) {
+  async addClass(body: any) {
     try {
-      const newClass = await this.model.create({ name: className });
+      const newClass = await this.model.create({ ...body });
       return newClass;
     } catch (err) {
       throw new Error(`Failed to add class: ${err.message}`);

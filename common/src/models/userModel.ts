@@ -28,7 +28,7 @@ const UserSchema = new Schema(
     userType: {
       type: String,
       required: true,
-      enum: ['Student', 'Admin', 'Parent', 'Teacher'],
+      enum: ['Student', 'Admin', 'Parent', 'Teacher','Super_Admin'],
     },
     userRoles: [
       {
@@ -66,7 +66,7 @@ UserSchema.pre('save', async function (next) {
         model = Parent;
         break;
       case 'Admin':
-        // case 'super-admin':
+        case 'Super_Admin':
         model = Admin;
         break;
       case 'Teacher':

@@ -3,7 +3,7 @@ import { iClass } from '../interfaces/class';
 
 const classSchema = new Schema<iClass>(
   {
-    name: { type: String, required: true, unique: true },
+    name: { type: String },
     classTeacher: {
       type: Schema.Types.ObjectId,
       ref: 'Teacher',
@@ -26,7 +26,7 @@ const classSchema = new Schema<iClass>(
     },
     school_id: {
       type: Schema.Types.ObjectId,
-      ref: 'School', // Reference to the School model
+      ref: 'School',
     },
 
     // TODO : add fields if needed

@@ -4,7 +4,7 @@ import { isAuthentic, verifyRole } from '@backend-monorepo/common';
 
 export const subjectRouter = Router();
 
-subjectRouter.use(isAuthentic).use(verifyRole('Admin'));
+subjectRouter.use(isAuthentic).use(verifyRole('Admin','Super_Admin'))
 
 subjectRouter.post(
   '/subject',

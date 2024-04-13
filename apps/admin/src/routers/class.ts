@@ -4,7 +4,7 @@ import { injectSchoolIdMiddleware, isAuthentic, verifyRole } from '@backend-mono
 
 export const classRouter = Router();
 
-classRouter.use(isAuthentic).use(verifyRole('admin'))
+classRouter.use(isAuthentic).use(verifyRole('Admin','Super_Admin'))
 .use(injectSchoolIdMiddleware);
 
 classRouter.post('/class', classController.addClass.bind(classController));

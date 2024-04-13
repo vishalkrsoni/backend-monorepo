@@ -17,6 +17,6 @@ app.use(cookieParser()).use(express.json()).use(cors()).use(userRoutes);
 
 app
   .listen(USER_PORT, () =>
-    logger.info(`User-service started : http://localhost:${USER_PORT}`)
+    logger.info(`Upload-service started : http://localhost:${USER_PORT}`)
   )
   .on('error', logger.error);
