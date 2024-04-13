@@ -1,7 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import { iAdmin } from '../interfaces';
 
-
 const adminSchema = new Schema<iAdmin>(
   {
     name: {
@@ -16,10 +15,9 @@ const adminSchema = new Schema<iAdmin>(
       type: String,
       required: true,
     },
-    school_id:{
+    school_id: {
       type: Schema.Types.ObjectId,
-      ref: 'School'
-
+      ref: 'School',
     },
 
     email: {

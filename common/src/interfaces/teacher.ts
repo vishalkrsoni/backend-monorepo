@@ -1,6 +1,6 @@
 import { genderType } from '../types/types';
 import { iClassSchedule } from './class';
-import { Document, Types, Schema } from 'mongoose'
+import { Document, Types, Schema } from 'mongoose';
 
 export interface iTeacher extends Document {
   name: string;
@@ -39,4 +39,3 @@ export type tTeacher = {
   isDeleted: boolean;
   // TODO : add fields if needed
 };
-

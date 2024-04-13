@@ -26,7 +26,6 @@ export interface LogOptions {
   // TODO : add fields if needed
 }
 
-
 export interface iAdmin extends Document {
   name: string;
   userName: string;
@@ -41,8 +40,6 @@ export interface iAdmin extends Document {
   isDeleted: boolean;
   // TODO : add fields if needed
 }
-
-
 
 export type tUser = {
   name: string;

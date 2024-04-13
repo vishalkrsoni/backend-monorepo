@@ -34,17 +34,19 @@ export class BaseUserService<T extends Document>
       );
     }
   }
-  
+
   async getByAttribute(attribute: string, value: any): Promise<T | null> {
     try {
       const filter = { [attribute]: value } as FilterQuery<T>;
       const document = await this.model.findOne(filter).exec();
       return document;
     } catch (error) {
-      throw new Error(`Failed to retrieve document by attribute: ${error.message}`);
+      throw new Error(
+        `Failed to retrieve document by attribute: ${error.message}`
+      );
     }
   }
-  
+
   async updateById(id: string, data: Partial<T>): Promise<T | null> {
     try {
       const updatedDocument = await this.model

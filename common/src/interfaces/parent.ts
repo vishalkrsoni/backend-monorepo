@@ -1,10 +1,10 @@
 import { genderType } from '../types/types';
-import { Document, Types, Schema } from 'mongoose'
+import { Document, Types, Schema } from 'mongoose';
 
 export interface iParent extends Document {
   name: string;
   password: string;
-  
+
   gender: genderType;
   email?: string;
   phone?: string;
@@ -18,8 +18,7 @@ export interface iParent extends Document {
   // TODO : add fields if needed
 }
 
-
-export type tParent= {
+export type tParent = {
   name: string;
   password: string;
   gender: genderType;
@@ -32,4 +31,4 @@ export type tParent= {
   students: Types.ObjectId[];
   isDeleted: boolean;
   // TODO : add fields if needed
-}
+};

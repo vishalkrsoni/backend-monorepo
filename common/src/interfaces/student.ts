@@ -1,5 +1,5 @@
 import { genderType } from '../types/types';
-import { Document, Types, Schema } from 'mongoose'
+import { Document, Types, Schema } from 'mongoose';
 
 export interface iStudent extends Document {
   name: string;
@@ -61,6 +61,3 @@ export type tStudent = {
 export type tQuiz = {
   // TODO : Define properties related to a quiz
 };
-
-
-

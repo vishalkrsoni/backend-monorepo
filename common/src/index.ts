@@ -19,8 +19,6 @@ export * from './services/baseService';
 export * from './services/isNetworkConnected';
 export * from './services/getInfoFromRequest';
 
-
-
 export * from './utils/winstonLogger';
 export * from './utils/consoleLogger';
 // export * from './services/consoleLogger';
@@ -42,4 +40,3 @@ export * from './controllers/baseController';
 export * from './middlewares/index';
 
 export * from './validator/validator';
-

@@ -76,7 +76,7 @@ export const extractLocationInfoMiddleware = async (
     console.log('first', response.data);
 
     // Attach location information to the request object
-    req.locationInfo = response.data
+    req.locationInfo = response.data;
 
     logger.info(`Location data from request:`, req.locationInfo);
   } catch (error) {

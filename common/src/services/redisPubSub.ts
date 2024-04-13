@@ -68,7 +68,7 @@ export const initializeRedisPubSub = (pubSubEnv: {
           `Retrying connection to Redis in ${delay / 1000} seconds...`
         );
         await new Promise((resolve) => setTimeout(resolve, delay));
-        return createPubSub(); 
+        return createPubSub();
         // Retry connection
       } else {
         logger.error('Failed to connect to Redis after retries. Exiting.');

@@ -13,11 +13,11 @@ const classScheduleSchema = new Schema<iClassSchedule>(
     ],
     class_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Class' // Reference to the School model
+      ref: 'Class', // Reference to the School model
     },
     school_id: {
       type: Schema.Types.ObjectId,
-      ref: 'School' // Reference to the School model
+      ref: 'School', // Reference to the School model
     },
     isDeleted: {
       type: Boolean,

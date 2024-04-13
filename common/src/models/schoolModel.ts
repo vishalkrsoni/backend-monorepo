@@ -1,10 +1,8 @@
 import { Document, Schema, model } from 'mongoose';
 import { iSchool } from '../interfaces';
 
-
 const schoolSchema = new Schema<iSchool>(
   {
-
     name: { type: String, required: true },
     email: { type: String },
     phone: { type: String },

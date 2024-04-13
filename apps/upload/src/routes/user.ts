@@ -17,7 +17,4 @@ userRouter.get(
 userRouter.get('/user/:id', userController.getById.bind(userController));
 userRouter.put('/user/:id', userController.updateById.bind(userController));
 
-userRouter.delete(
-  '/user/:id',
-  userController.deleteById.bind(userController)
-);
+userRouter.delete('/user/:id', userController.deleteById.bind(userController));

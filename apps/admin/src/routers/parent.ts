@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import { parentController } from '../store';
 
-
 export const parentRouter = Router();
-
 
 parentRouter.get('/parents', parentController.getAll.bind(parentController));
 

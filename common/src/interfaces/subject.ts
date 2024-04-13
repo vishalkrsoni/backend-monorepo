@@ -1,7 +1,6 @@
-import { Document, Types, Schema } from 'mongoose'
+import { Document, Types, Schema } from 'mongoose';
 
 export interface iSubject extends Document {
-
   name: string;
   tutor: Schema.Types.ObjectId;
   isDeleted: boolean;

@@ -7,8 +7,8 @@ let isConnected = false;
 export const dbPing = async (
   req: Request,
   res: Response,
-  mongo_url:string,
-  db_name:string,
+  mongo_url: string,
+  db_name: string,
   next: NextFunction
 ): Promise<void> => {
   try {
@@ -16,7 +16,7 @@ export const dbPing = async (
       logger.info('Database already connected');
       next();
     } else {
-      await mongoConnect(mongo_url,db_name);
+      await mongoConnect(mongo_url, db_name);
       logger.info('Connected to the database');
       isConnected = true;
       next();

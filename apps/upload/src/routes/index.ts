@@ -1,5 +1,3 @@
-
-
 import { Router } from 'express';
 import { parentRouter } from './parent';
 import { studentRouter } from './student';
@@ -13,5 +11,3 @@ export const userRoutes = Router();
 userRoutes.use('/', parentRouter);
 userRoutes.use('/', studentRouter);
 userRoutes.use('/', teacherRouter);
-
-

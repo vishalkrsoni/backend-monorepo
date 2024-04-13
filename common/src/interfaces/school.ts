@@ -18,4 +18,3 @@ export type tSchool = {
   isDeleted: boolean;
   // TODO : add fields if needed
 };
-

@@ -47,7 +47,7 @@ export type tClassSchedule = {
 export type tClass = {
   name: string;
   school_id: Types.ObjectId;
-  
+
   classTeacher: Types.ObjectId;
   classSchedule: Types.ObjectId;
   students: Types.ObjectId[];

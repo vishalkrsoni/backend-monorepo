@@ -20,9 +20,8 @@ export const isAdminOrLoggedInUser = async (
     const requestedUser = req.body.userName;
 
     if (hasAdminRole || loggedInUser === requestedUser) next();
-    
     else {
-     return res.status(FORBIDDEN).json({
+      return res.status(FORBIDDEN).json({
         message: 'You do not have sufficient privileges',
         status: 'error',
         statusCode: FORBIDDEN,
