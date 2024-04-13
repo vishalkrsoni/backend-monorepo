@@ -1,0 +1,24 @@
+{
+  "name": "upload",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/upload/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "upload:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "upload:build:development"
+        },
+        "production": {
+          "buildTarget": "upload:build:production"
+        }
+      }
+    }
+  }
+}

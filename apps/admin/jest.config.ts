@@ -9,3 +9,28 @@ export default {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/admin',
 };
+
+declare type DisplayName = {
+  name: string;
+  color: ForegroundColor;
+};
+
+declare type ForegroundColor =
+  | 'black'
+  | 'red'
+  | 'green'
+  | 'yellow'
+  | 'blue'
+  | 'magenta'
+  | 'cyan'
+  | 'white'
+  | 'gray'
+  | 'grey'
+  | 'blackBright'
+  | 'redBright'
+  | 'greenBright'
+  | 'yellowBright'
+  | 'blueBright'
+  | 'magentaBright'
+  | 'cyanBright'
+  | 'whiteBright';

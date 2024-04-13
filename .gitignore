@@ -39,3 +39,13 @@ testem.log
 Thumbs.db
 
 .nx/cache
+
+.env
+.env/
+.env/*
+
+**/.env
+
+dist
+dist/
+**/dist
