@@ -1,11 +1,9 @@
 import { Router } from 'express';
+import { userController } from '../store';
 
-import { UserController } from '../controllers/user';
-import { UserService } from '../services/user';
-
+// import { UserController } from '../controllers/user';
+// import { UserService } from '../services/user';
 export const userRouter = Router();
-
-const userController = new UserController(new UserService());
 
 userRouter.get('/user', userController.getAll.bind(userController));
 

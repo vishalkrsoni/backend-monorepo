@@ -7,14 +7,20 @@ import { classScheduleRouter } from './classSchedule';
 import { subjectRouter } from './subject';
 import { schoolRouter } from './school';
 import { userRouter } from './user';
+import { parentRouter } from './parent';
+import { teacherRouter } from './teacher';
+import { studentRouter } from './student';
 
 export const adminRoutes = Router();
 
-// Mount individual routers onto the main router
 adminRoutes.use('/', authRouter);
+adminRoutes.use('/', classRouter);
 adminRoutes.use('/', schoolRouter);
 adminRoutes.use('/', otpRouter);
-adminRoutes.use('/', classRouter);
+adminRoutes.use('/', userRouter);
 adminRoutes.use('/', classScheduleRouter);
 adminRoutes.use('/', subjectRouter);
-adminRoutes.use('/', userRouter);
+adminRoutes.use('/', parentRouter);
+adminRoutes.use('/', teacherRouter);
+adminRoutes.use('/', studentRouter);
+

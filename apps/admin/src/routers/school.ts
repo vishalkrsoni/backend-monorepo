@@ -4,7 +4,7 @@ import { schoolController } from '../store';
 
 export const schoolRouter = Router();
 
-schoolRouter.use(isAuthentic).use(verifyRole('Super_Admin','Admin'));
+schoolRouter.use(isAuthentic).use(verifyRole('Super_Admin'));
 
 schoolRouter.post('/school', schoolController.addSchool.bind(schoolController));
 schoolRouter.get('/school', schoolController.getAll.bind(schoolController));

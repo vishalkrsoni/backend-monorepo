@@ -1,10 +1,77 @@
-import { BaseUserService, User, iUser } from '@backend-monorepo/common';
+import {
+  BaseUserService,
+  User,
+  generateNewError,
+  iUser,
+} from '@backend-monorepo/common';
+import { StatusCodes as HTTPStatusCodes } from 'http-status-codes';
+// import User from '../models';
+import bcrypt from 'bcrypt';
 
 export class UserService extends BaseUserService<iUser> {
   constructor() {
     super(User);
   }
 
+  registerUser = async (body: any) => {
+    try {
+      const { name, userName, password, userType, school_id } = body;
+
+      const existingUser = await this.model.findOne({ userName });
+      if (existingUser) {
+        throw generateNewError(400, 'User already exists');
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      // const cachedUser = await redis.get('user');
+
+      const user = new User({
+        name,
+        school_id,
+        userName,
+        userType,
+        password: hashedPassword,
+      });
+
+      // redis.set('user', JSON.stringify(user));
+      await user.save();
+      return { user };
+    } catch (error) {
+      throw error instanceof Error
+        ? error
+        : generateNewError(
+            HTTPStatusCodes.INTERNAL_SERVER_ERROR,
+            'Internal server error',
+            error,
+          );
+    }
+  };
+
+  loginUser = async (userName: string, password: string) => {
+    try {
+      const user = await this.model.findOne({ userName });
+
+      if (!user)
+        throw generateNewError(
+          HTTPStatusCodes.NOT_FOUND,
+          'User does not exist',
+        );
+
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword)
+        throw generateNewError(HTTPStatusCodes.BAD_REQUEST, 'Invalid password');
+
+      return user;
+    } catch (error) {
+      throw error instanceof Error
+        ? error
+        : generateNewError(
+            HTTPStatusCodes.INTERNAL_SERVER_ERROR,
+            'Internal server error',
+            error,
+          );
+    }
+  };
   async getAll(): Promise<any[]> {
     try {
       return await this.model
@@ -58,23 +125,6 @@ export class UserService extends BaseUserService<iUser> {
 //   } catch (error) {
 //     throw new Error(
 //       `Error while deleting parent with ID ${id}: ${error.message}`
-//     );
-//   }
-// }
-
-// async getChildrenByParentId(parentId: string): Promise<any[]> {
-//   try {
-//     const parent = await this.model
-//       .findById(parentId)
-//       .populate('students')
-//       .exec();
-//     if (!parent) {
-//       throw new Error(`Parent with ID ${parentId} not found`);
-//     }
-//     return parent.students;
-//   } catch (error) {
-//     throw new Error(
-//       `Error while retrieving children for parent with ID ${parentId}: ${error.message}`
 //     );
 //   }
 // }

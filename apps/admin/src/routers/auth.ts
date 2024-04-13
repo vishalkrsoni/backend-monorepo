@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { login, register } from '../controllers';
+import { userController } from '../store';
+
 import {
   CustomRequest,
   extractDeviceInfoMiddleware,
@@ -10,8 +11,8 @@ import {
 
 export const authRouter = Router();
 
-authRouter.post('/login', login);
-authRouter.post('/register', register);
+authRouter.post('/login', userController.login.bind(userController));
+authRouter.post('/register', userController.register.bind(userController));
 
 authRouter.get(
   '/safe-route',

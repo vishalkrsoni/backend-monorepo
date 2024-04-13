@@ -3,18 +3,25 @@ import {
   getRedisURL,
   initializeRedisPubSub,
 } from '@backend-monorepo/common';
-import { ClassController } from './controllers/class';
-import { ClassScheduleController } from './controllers/classSchedule';
-import { SubjectController } from './controllers/subject';
-import { ClassService } from './services/class';
-import { ClassScheduleService } from './services/classSchedule';
-import { SubjectService } from './services/subject';
-import { SchoolService } from './services/school';
-import { SchoolController } from './controllers/school';
-import { StudentService } from './services/student';
-import { ParentService } from './services/parent';
-import { ParentController } from './controllers/parent';
-import { StudentController } from './controllers/student';
+import {
+  ClassController,
+  SchoolController,
+  UserController,
+  StudentController,
+  ParentController,
+  SubjectController,
+  ClassScheduleController,
+} from './controllers';
+import {
+  ClassService,
+  SchoolService,
+  SubjectService,
+  UserService,
+  ParentService,
+  StudentService,
+  ClassScheduleService,
+} from './services';
+
 const {
   ENV_REDIS,
   REDIS_URL,
@@ -31,6 +38,8 @@ export const schoolService = new SchoolService();
 export const schoolController = new SchoolController();
 
 export const subjectService = new SubjectService();
+
+export const userController = new UserController(new UserService());
 
 // export const parentService = new ParentService();
 export const parentService = new ParentService();

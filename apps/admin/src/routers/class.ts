@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import { classController } from '../store';
-import { injectSchoolIdMiddleware, isAuthentic, verifyRole } from '@backend-monorepo/common';
+import {
+  injectSchoolIdMiddleware,
+  isAuthentic,
+  verifyRole,
+} from '@backend-monorepo/common';
 
 export const classRouter = Router();
 
-classRouter.use(isAuthentic).use(verifyRole('Admin','Super_Admin'))
-.use(injectSchoolIdMiddleware);
+classRouter.use(isAuthentic);
+classRouter.use(verifyRole('Admin'));
+classRouter.use(injectSchoolIdMiddleware);
 
 classRouter.post('/class', classController.addClass.bind(classController));
 classRouter.get('/class', classController.getAll.bind(classController));
