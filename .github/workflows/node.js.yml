@@ -25,12 +25,12 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Format and start admin and upload services
         run: |
-          npx nx reset
-          npx nx run-many --target=build
+          yarn reset
+          yarn build-all
           yarn format-admin &
           yarn format-upload &
           yarn start-admin &
