@@ -3,6 +3,7 @@ import {
   Parent,
   Student,
   Teacher,
+  SuperAdmin,
   iUser,
   logger,
 } from '@backend-monorepo/common';
@@ -28,7 +29,7 @@ const UserSchema = new Schema(
     userType: {
       type: String,
       required: true,
-      enum: ['Student', 'Admin', 'Parent', 'Teacher', 'Super_Admin'],
+      enum: ['Student', 'Admin', 'Parent', 'Teacher', 'SuperAdmin'],
     },
     userRoles: [
       {
@@ -66,8 +67,10 @@ UserSchema.pre('save', async function (next) {
         model = Parent;
         break;
       case 'Admin':
-      case 'Super_Admin':
         model = Admin;
+        break;
+      case 'SuperAdmin':
+        model = SuperAdmin;
         break;
       case 'Teacher':
         model = Teacher;
@@ -79,7 +82,7 @@ UserSchema.pre('save', async function (next) {
     const newUser = await model.create({ name, userName, userType });
     this.userInfo = newUser._id;
     logger.debug(`Created new entry for ${userType}: ${userName}`);
-    if (userType === 'Super_Admin') this.set('userRoles', [userType, 'Admin']);
+    if (userType === 'SuperAdmin') this.set('userRoles', [userType, 'Admin']);
     else this.set('userRoles', [userType]);
 
     next();

@@ -32,11 +32,27 @@ export interface iAdmin extends Document {
   email: string;
   userType: string;
   phone: string;
+  userInfo: Types.ObjectId;
+
   password: string;
   role: string;
   schoolName: string;
   school_id: Types.ObjectId;
+  isDeleted: boolean;
+  // TODO : add fields if needed
+}
 
+export interface iSuperAdmin extends Document {
+  name: string;
+  userName: string;
+  email: string;
+  userType: string;
+  phone: string;
+  password: string;
+  userInfo: Types.ObjectId;
+  role: string;
+  schoolName: string;
+  school_id: Types.ObjectId;
   isDeleted: boolean;
   // TODO : add fields if needed
 }

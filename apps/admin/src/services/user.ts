@@ -75,11 +75,8 @@ export class UserService extends BaseUserService<iUser> {
   async getAll(): Promise<any[]> {
     try {
       return await this.model
-        .find()
-        .populate(
-          'userInfo',
-          '-_id -name -userName -userType -createdAt -updatedAt -__v',
-        );
+        .find({}, { password: false })
+        .populate('userInfo');
     } catch (error) {
       console.error('Error occurred while fetching users:', error);
       throw new Error(error);

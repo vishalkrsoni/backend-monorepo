@@ -16,12 +16,10 @@ declare module 'express' {
 export const isAuthentic = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const token = req.header('Authorization');
-
-    logger.info('token is:', token);
     if (!token) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
         message: 'valid token required',
@@ -29,12 +27,12 @@ export const isAuthentic = (
       });
     }
 
-    const verified = jwt.verify(token, JWT_SECRET_KEY as string);
+    const verifiedUser = jwt.verify(token, JWT_SECRET_KEY as string);
 
-    logger.info('verify status', verified);
-    logger.debug(token);
-    req.user = verified;
-    if (verified) {
+    // logger.info('verified user: ', verifiedUser);
+
+    req.user = verifiedUser;
+    if (verifiedUser) {
       next();
     } else {
       return res.status(StatusCodes.UNAUTHORIZED).json({

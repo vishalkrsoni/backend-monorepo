@@ -1,9 +1,9 @@
 export type UserType =
-  | 'Student'
+  | 'SuperAdmin'
   | 'Admin'
-  | 'Parent'
   | 'Teacher'
-  | 'Super_Admin';
+  | 'Student'
+  | 'Parent';
 
 export type genderType = 'Male' | 'Female' | 'Other';
 

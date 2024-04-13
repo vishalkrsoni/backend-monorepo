@@ -16,10 +16,11 @@ export const injectSchoolIdMiddleware = (
         APIResponse.internalServerError('User is not associated to any school'),
       );
   }
-  if (!school_id)
-    logger.warn(`class ${req.body.name} is not associated to any school`);
-  req.body.warning = `class ${req.body.name} is not associated to any school`;
-  req.body.school_id = school_id;
+  if (school_id) req.body.school_id = school_id;
+  else {
+    logger.warn(`${req.body.name} is not associated to any school`);
+    req.body.warning = `Can not associate to any school`;
+  }
 
   next();
 };

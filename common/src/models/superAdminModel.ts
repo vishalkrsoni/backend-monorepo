@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
-import { iAdmin } from '../interfaces';
+import { iSuperAdmin } from '../interfaces';
 
-const adminSchema = new Schema<iAdmin>(
+const superAdminSchema = new Schema<iSuperAdmin>(
   {
     name: {
       type: String,
@@ -21,29 +21,21 @@ const adminSchema = new Schema<iAdmin>(
     },
     userInfo: {
       type: Schema.Types.ObjectId,
-      ref: 'Admin',
+      ref: 'SuperAdmin',
     },
     email: {
       type: String,
-      // unique: true,
       // required: true,
     },
     password: {
       type: String,
-      // required: true,
     },
     phone: {
       type: String,
-      // required: true,
     },
     role: {
       type: String,
-      default: 'Admin',
-    },
-    schoolName: {
-      type: String,
-      // unique: true,
-      // required: true,
+      default: 'SuperAdmin',
     },
     isDeleted: {
       type: Boolean,
@@ -53,4 +45,4 @@ const adminSchema = new Schema<iAdmin>(
 
   { timestamps: true },
 );
-export const Admin = model<iAdmin>('Admin', adminSchema);
+export const SuperAdmin = model<iSuperAdmin>('SuperAdmin', superAdminSchema);

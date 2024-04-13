@@ -7,6 +7,7 @@ export class ClassService extends BaseUserService<iClass> {
   }
 
   async addClass(body: any) {
+    console.log('body is:',body)
     try {
       const newClass = await this.model.create({ ...body });
       return newClass;
