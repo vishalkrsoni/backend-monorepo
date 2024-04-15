@@ -14,7 +14,6 @@
     "start-upload": "npx nx serve upload",
     "start-event": "npx nx serve event",
     "lint:admin": "eslint apps/admin --ext .ts --fix",
-  
     "format-admin": "prettier --write apps/admin",
     "format-upload": "prettier --write apps/upload",
     "format:check:admin": "prettier --check apps/admin",
@@ -30,6 +29,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
+    "@types/express-rate-limit": "^6.0.0",
     "@types/express-validator": "^3.0.0",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/jsonwebtoken": "^9.0.6",
@@ -47,6 +47,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "~4.19.2",
+    "express-rate-limit": "^7.2.0",
     "express-validator": "^7.0.1",
     "google-libphonenumber": "^3.2.34",
     "http-status-codes": "^2.3.0",

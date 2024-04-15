@@ -6,7 +6,7 @@ interface BaseServiceInterface {
   getById(id: string): Promise<any>;
   getByAttribute(attribute: string, value: any): Promise<any>;
   updateById(id: string, data: any): Promise<any>;
-  deleteById(id: string): Promise<void>;
+  deleteById(id: string): Promise<void | any>;
 }
 
 export class BaseController<T extends BaseServiceInterface> {
@@ -15,7 +15,7 @@ export class BaseController<T extends BaseServiceInterface> {
   async getAll(req: Request, res: Response) {
     try {
       const data = await this.service.getAll();
-      res.json(APIResponse.success(data, 'found all requested users info'));
+      res.json(APIResponse.success(data, 'Found all requested users info'));
     } catch (error) {
       res.status(500).json(APIResponse.internalServerError(error.message));
     }
@@ -26,12 +26,14 @@ export class BaseController<T extends BaseServiceInterface> {
     try {
       const data = await this.service.getById(id);
       if (data) {
-        res.json(APIResponse.success(data, 'data found by id successfully'));
+        res.json(APIResponse.success(data, 'Data found by id successfully'));
       } else {
         res
           .status(404)
           .json(
-            APIResponse.notFound('could not found any entry with requested id')
+            APIResponse.notFound(
+              'Could not find any entry with the requested id',
+            ),
           );
       }
     } catch (error) {
@@ -42,6 +44,11 @@ export class BaseController<T extends BaseServiceInterface> {
   async getByAttribute(req: Request, res: Response) {
     const { attribute, value } = req.body;
     try {
+      if (!attribute || !value) {
+        return res
+          .status(400)
+          .json(APIResponse.badRequest('Attribute and value must be provided'));
+      }
       const data = await this.service.getByAttribute(attribute, value);
       if (data) {
         res.json(APIResponse.success(data));
@@ -57,7 +64,7 @@ export class BaseController<T extends BaseServiceInterface> {
     const id = req.params.id;
     try {
       const data = await this.service.updateById(id, req.body);
-      res.json(APIResponse.success(data, 'updated successfully'));
+      res.json(APIResponse.success(data, 'Updated successfully'));
     } catch (error) {
       res.status(500).json(APIResponse.internalServerError(error.message));
     }

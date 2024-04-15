@@ -8,10 +8,24 @@ import {
   isAuthentic,
   verifyRole,
 } from '@backend-monorepo/common';
+import { loginLimiter } from '../middlewares/loginLimiter';
 
 export const authRouter = Router();
 
-authRouter.post('/login', userController.login.bind(userController));
+authRouter.post(
+  '/register-admin',
+  loginLimiter,
+  userController.addSuperAdmin.bind(userController),
+);
+
+authRouter.post(
+  '/login',
+  loginLimiter,
+  userController.login.bind(userController),
+);
+
+authRouter.use(isAuthentic).use(verifyRole('Super_Admin', 'Admin'));
+
 authRouter.post('/register', userController.register.bind(userController));
 
 authRouter.get(

@@ -14,10 +14,10 @@ import { studentRouter } from './student';
 export const adminRoutes = Router();
 
 adminRoutes.use('/', authRouter);
-adminRoutes.use('/', classRouter);
-adminRoutes.use('/', schoolRouter);
-adminRoutes.use('/', otpRouter);
 adminRoutes.use('/', userRouter);
+adminRoutes.use('/', schoolRouter);
+adminRoutes.use('/', classRouter);
+adminRoutes.use('/', otpRouter);
 adminRoutes.use('/', classScheduleRouter);
 adminRoutes.use('/', subjectRouter);
 adminRoutes.use('/', parentRouter);
