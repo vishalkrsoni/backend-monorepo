@@ -2,11 +2,10 @@ import jwt = require('jsonwebtoken');
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { logger } from '../store';
+import { APIResponse } from '../utils';
 
 const { JWT_SECRET_KEY } = process.env;
 
-// Declare a module to add the user property
-// to the Express Request interface
 declare module 'express' {
   interface Request {
     user?: any;
@@ -21,10 +20,9 @@ export const isAuthentic = (
   try {
     const token = req.header('Authorization');
     if (!token) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'valid token required',
-        status: 'error',
-      });
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(APIResponse.unauthorized(`Invalid request, No token found`));
     }
 
     const verifiedUser = jwt.verify(token, JWT_SECRET_KEY as string);
@@ -35,27 +33,25 @@ export const isAuthentic = (
     if (verifiedUser) {
       next();
     } else {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'incorrect token',
-        status: 'error',
-      });
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(APIResponse.unauthorized(`Incorrect/malfunctioned token found`));
     }
   } catch (err) {
     logger.error('Error during token verification:', err);
 
-    let tokenError: string;
+    let tokenErrorMessage: string;
 
     if (err.name === 'JsonWebTokenError') {
-      tokenError = 'wrong token passed';
+      tokenErrorMessage = 'wrong token passed';
     } else if (err.name === 'TokenExpiredError') {
-      tokenError = 'token expired';
+      tokenErrorMessage = 'token expired';
     } else {
-      tokenError = 'invalid token';
+      tokenErrorMessage = 'invalid token';
     }
 
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: tokenError,
-      status: 'error',
-    });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json(APIResponse.unauthorized(tokenErrorMessage, err));
   }
 };

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { APIResponse } from '../utils';
 import { StatusCodes } from 'http-status-codes';
 
 const { UNAUTHORIZED, FORBIDDEN } = StatusCodes;
@@ -9,9 +10,14 @@ const checkRolesAgainstUser = (userRoles: string[], allowedRoles: string[]) =>
 export const verifyRole = (...allowedRoles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log('token user:', req.user);
       if (!req.user?.roles) {
-        throw new Error('Unauthorized request');
+        return res
+          .status(UNAUTHORIZED)
+          .json(
+            APIResponse.unauthorized(
+              `Invalid request, user has no roles specified`,
+            ),
+          );
       }
 
       const hasAllowedRole = checkRolesAgainstUser(
@@ -20,22 +26,25 @@ export const verifyRole = (...allowedRoles: string[]) => {
       );
 
       if (!hasAllowedRole) {
-        return res.status(FORBIDDEN).json({
-          message: `You do not have the required permission: ${allowedRoles}`,
-          status: 'error',
-          statusCode: FORBIDDEN,
-          data: null,
-        });
+        return res
+          .status(FORBIDDEN)
+          .json(
+            APIResponse.forbidden(
+              `You do not have the required permission: ${allowedRoles}`,
+            ),
+          );
       }
 
       next();
     } catch (error) {
-      return res.status(UNAUTHORIZED).json({
-        message: error.message || 'Unauthorized request',
-        status: 'error',
-        statusCode: UNAUTHORIZED,
-        data: null,
-      });
+      return res
+        .status(UNAUTHORIZED)
+        .json(
+          APIResponse.unauthorized(
+            error.message || `Unauthorized request`,
+            error,
+          ),
+        );
     }
   };
 };

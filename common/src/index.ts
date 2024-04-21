@@ -2,9 +2,12 @@ export * from './lib/common';
 
 export * from './helper/pubSub';
 
-export * from './config/redis';
+export * from './config/redisPubSub';
+export * from './config/cloudinary';
 
 export * from './config/kafka';
+export * from './config/s3Bucket';
+
 export * from './config/emailOptions';
 export * from './config/nodeMailerConfig';
 
@@ -24,7 +27,6 @@ export * from './utils/consoleLogger';
 // export * from './services/consoleLogger';
 
 export * from './utils/apiResponse';
-export * from './utils/error';
 export * from './utils/listenToRedis';
 
 // export * from './class/index';
@@ -40,3 +42,5 @@ export * from './controllers/baseController';
 export * from './middlewares/index';
 
 export * from './validator/validator';
+
+export * from './clients/index';

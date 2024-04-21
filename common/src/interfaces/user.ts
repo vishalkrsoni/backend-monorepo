@@ -5,7 +5,7 @@ export interface iUser extends Document {
   name: string;
   email?: string;
   school_id: Types.ObjectId;
-
+  image: string;
   phone?: string;
   userName: string;
   password: string;
@@ -30,10 +30,11 @@ export interface iAdmin extends Document {
   name: string;
   userName: string;
   email: string;
+  image: string;
+
   userType: string;
   phone: string;
   userInfo: Types.ObjectId;
-
   password: string;
   role: string;
   schoolName: string;
@@ -46,6 +47,7 @@ export interface iSuperAdmin extends Document {
   name: string;
   userName: string;
   email: string;
+  image: string;
   userType: string;
   phone: string;
   password: string;
@@ -61,6 +63,8 @@ export type tUser = {
   name: string;
   email?: string;
   phone?: string;
+  image: string;
+
   userName: string;
   password: string;
   userType: UserType;
@@ -83,6 +87,8 @@ export type tLogOptions = {
 export type tAdmin = {
   name: string;
   email: string;
+  image: string;
+
   password: string;
   role: string;
   schoolName: string;

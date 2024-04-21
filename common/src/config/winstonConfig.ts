@@ -5,7 +5,7 @@ export const options: {
   console: LogOptions;
 } = {
   file: {
-    level: 'error', // Save errors to file
+    level: 'error', // Save only error logs to file
     filename: './logs/errors.log',
     handleExceptions: true,
     json: true,
@@ -14,8 +14,8 @@ export const options: {
     colorize: false,
   },
   console: {
-    level: 'debug', // Print all levels to console (can be adjusted)
+    level: 'debug', // Print all levels to console
     handleExceptions: true,
-    json: false, // Print formatted messages to console
+    json: true, // Print formatted messages to console
   },
 };

@@ -15,6 +15,9 @@ const adminSchema = new Schema<iAdmin>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
     school_id: {
       type: Schema.Types.ObjectId,
       ref: 'School',

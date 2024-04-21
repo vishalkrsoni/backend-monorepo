@@ -1,14 +1,19 @@
-import { kafka } from '../config/kafka';
-import { logger } from '../store';
+import { KafkaClass } from '../clients';
+import { getKafkaConfig } from '../config/kafka';
+import { kafkaProducer, logger } from '../store';
 
-const producer = kafka.producer();
+// const kafkaConfig = getKafkaConfig();
+// const kafka = new KafkaClass(kafkaConfig);
+// const kafkaClient = kafka.getClient();
+// const kafkaProducer = kafka.getProducer();
+
 export async function sendToKafka(
   topic: string,
-  message: string
+  message: string,
 ): Promise<void> {
   try {
-    await producer.connect();
-    const messageToKafka = await producer.send({
+    await kafkaProducer.connect();
+    const messageToKafka = await kafkaProducer.send({
       topic,
       messages: [{ value: message }],
     });
@@ -19,6 +24,6 @@ export async function sendToKafka(
     logger.error('Error sending message to Kafka:', error);
     // throw error;
   } finally {
-    await producer.disconnect();
+    await kafkaProducer.disconnect();
   }
 }

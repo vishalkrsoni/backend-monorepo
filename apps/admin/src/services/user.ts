@@ -1,97 +1,23 @@
 import bcrypt from 'bcrypt';
 import { getTimeInIST } from '../utils/timeHelper';
-import { StatusCodes as HTTPStatusCodes } from 'http-status-codes';
 import {
   User,
   iUser,
   logger,
+  APIResponse,
   BaseUserService,
-  generateNewError,
   verifyRole,
 } from '@backend-monorepo/common';
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../utils/accessToken';
+import { UserValidator } from '../validators/userValidator';
 
 export class UserService extends BaseUserService<iUser> {
   constructor() {
     super(User);
   }
-
-  addSuperAdmin = async (body: any) => {
-    try {
-      const exists = await this.model.findOne({
-        userName: body.userName,
-      });
-      if (exists) {
-        throw generateNewError(400, `Username is taken`);
-      }
-      const newAdminUser = new User({
-        ...body,
-        password: await bcrypt.hash(body.password, 10),
-      });
-
-      const newEvent = {
-        type: 'SUPER_ADMIN_CREATE',
-        data: {
-          userId: newAdminUser._id,
-          name: newAdminUser.name,
-          userType: body.userType,
-          userRoles: newAdminUser.userRoles,
-        },
-        createdAt: new Date(Date.now()),
-      };
-      return { user: newEvent };
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  registerUser = async (body: any) => {
-    try {
-      const { userName, password, userType, school_id } = body;
-
-      const existingUser = await this.model.findOne({ userName });
-      if (existingUser) {
-        throw generateNewError(400, `Username is already taken`);
-      }
-
-      // const cachedUser = await redis.get('user');
-
-      const user = new User({
-        ...body,
-        password: await bcrypt.hash(password, 10),
-      });
-
-      // redis.set('user', JSON.stringify(user));
-
-      await user.save();
-
-      const eventType = userType.toUpperCase() + '_CREATE';
-      const { Time, Day } = getTimeInIST(new Date(Date.now()));
-      const newEvent = {
-        type: eventType,
-        data: {
-          ...body,
-          userId: user._id,
-          userRoles: user.userRoles,
-        },
-        createdAt: `{Time} : {Day}`,
-      };
-
-      logger.info('created event', newEvent);
-      return { user };
-    } catch (error) {
-      throw error instanceof Error
-        ? error
-        : generateNewError(
-            HTTPStatusCodes.INTERNAL_SERVER_ERROR,
-            'Internal server error',
-            error,
-          );
-    }
-  };
 
   loginUser = async (body: any) => {
     try {
@@ -99,11 +25,7 @@ export class UserService extends BaseUserService<iUser> {
 
       const existingUser = await this.model.findOne({ userName });
 
-      if (!existingUser)
-        throw generateNewError(
-          HTTPStatusCodes.NOT_FOUND,
-          'User does not exist',
-        );
+      if (!existingUser) return APIResponse.notFound('User does not exist');
 
       const validPassword = await bcrypt.compare(
         password,
@@ -111,10 +33,7 @@ export class UserService extends BaseUserService<iUser> {
       );
 
       if (!validPassword) {
-        throw generateNewError(
-          HTTPStatusCodes.BAD_REQUEST,
-          'Invalid password: please provide a valid password',
-        );
+        return APIResponse.unauthorized('Invalid password');
       }
 
       const userInfo = {
@@ -133,73 +52,156 @@ export class UserService extends BaseUserService<iUser> {
           refreshToken: generateRefreshToken(userInfo),
         },
       };
-
-      // const newEvent = {
-      //   type: 'USER_LOGGED',
-      //   data: user,
-      //   createdAt: new Date(Date.now()),
-      // };
-
-      // // Sending event to kafka
-      // await sendToKafka('USER_CREATE', JSON.stringify(newEvent));
     } catch (error) {
-      throw error instanceof Error
-        ? error
-        : generateNewError(
-            HTTPStatusCodes.INTERNAL_SERVER_ERROR,
-            'Internal server error',
-            error,
-          );
+      logger.error('Error occurred while logging in user:', error);
+      return error;
     }
   };
-  async getAll(): Promise<any[]> {
+
+  addSuperAdmin = async (body: any) => {
     try {
-      return await this.model
+      const { userName, password } = body;
+
+      const validationError = UserValidator.validateAddSuperAdmin(body);
+
+      if (validationError) {
+        return APIResponse.badRequest(
+          `Input validation failed`,
+          validationError,
+        );
+      }
+
+      const exists = await this.model.findOne({ userName });
+      if (exists) {
+        return APIResponse.conflict(
+          `Username ${userName} is already taken.`,
+          `userName shall be unique`,
+        );
+      }
+
+      const newAdminUser = new User({
+        ...body,
+        password: await bcrypt.hash(password, 10),
+      });
+
+      await newAdminUser.save();
+
+      const newEvent = {
+        type: 'SUPER_ADMIN_CREATE',
+        data: {
+          userId: newAdminUser._id,
+          name: newAdminUser.name,
+          userRoles: newAdminUser.userRoles,
+        },
+        createdAt: new Date(),
+      };
+
+      return APIResponse.created('Successfully added super admin.', {
+        ...newEvent.data,
+      });
+    } catch (error) {
+      logger.error('Error occurred while adding super admin:', error);
+      return APIResponse.internalServerError(
+        'An error occurred while adding super admin.',
+        error,
+      );
+    }
+  };
+
+  private checkPermissionAgainstRoles(
+    userRoles: string[],
+    requiredRoles: string[],
+  ): boolean {
+    return requiredRoles.some((role) => userRoles.includes(role));
+  }
+
+  private getRequiredRoles(userType: string): string[] {
+    switch (userType) {
+      case 'Admin':
+        return ['SuperAdmin', 'Admin'];
+      case 'Teacher':
+      case 'Student':
+      case 'Parent':
+        return ['Admin'];
+      default:
+        throw new Error(`Invalid userType: ${userType}`);
+    }
+  }
+
+  registerUser = async (body: any) => {
+    try {
+      const { userName, password, userType } = body;
+
+      const validationError = UserValidator.validateRegisterUser(body);
+      if (validationError) {
+        return APIResponse.badRequest(
+          `Input validation error`,
+          validationError,
+        );
+      }
+
+      const permission = this.checkPermissionAgainstRoles(
+        body.roles,
+        this.getRequiredRoles(userType),
+      );
+
+      if (!permission) {
+        APIResponse.forbidden(
+          `User not allowed to add new ${body.userType}`,
+          `Insufficient permissions to perform action`,
+        );
+      }
+
+      const existingUser = await this.model.findOne({ userName });
+
+      if (existingUser) {
+        return APIResponse.conflict(
+          'Username is already taken',
+          `Username shall be unique`,
+        );
+      }
+
+      const user = new User({
+        ...body,
+        password: await bcrypt.hash(password, 10),
+      });
+
+      await user.save();
+
+      const eventType = userType.toUpperCase() + '_CREATE';
+      const { Time, Day } = getTimeInIST(new Date(Date.now()));
+      const newEvent = {
+        type: eventType,
+        data: {
+          ...body,
+          userId: user._id,
+          userRoles: user.userRoles,
+        },
+        createdAt: `${Day}-${Time}`,
+      };
+
+      logger.info('created event', newEvent);
+      return APIResponse.success(`user added of type ${userType}`, {
+        user: { ...newEvent.data },
+      });
+    } catch (error) {
+      logger.error(`Error occurred while registering user `, error);
+      return APIResponse.internalServerError(
+        `Error occurred while registering user `,
+        error,
+      );
+    }
+  };
+
+  async getAll() {
+    try {
+      const data = await this.model
         .find({}, { password: false })
         .populate('userInfo');
+      return APIResponse.success('success fetching', data);
     } catch (error) {
-      console.error('Error occurred while fetching users:', error);
-      throw new Error(error);
+      logger.error('Error occurred while fetching users:', error);
+      throw APIResponse.internalServerError('Internal server error');
     }
   }
 }
-
-// async getByUserName(userName: string): Promise<iParent | null> {
-//   try {
-//     return await this.model.findOne({ userName }).exec();
-//   } catch (error) {
-//     throw new Error(
-//       `Error while retrieving parent with username ${userName}: ${error.message}`
-//     );
-//   }
-// }
-
-// async getByAttribute(attribute: string, value: any): Promise<iParent | null> {
-//   try {
-//     return await this.model.findOne({ [attribute]: value }).exec();
-//   } catch (error) {
-//     throw new Error(
-//       `Error while retrieving parent by attribute ${attribute} with value ${value}: ${error.message}`
-//     );
-//   }
-// }
-
-// async updateById(id: string, data: any): Promise<iParent | null> {
-//   try {
-//     return await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
-//   } catch (error) {
-//     throw new Error(
-//       `Error while updating parent with ID ${id}: ${error.message}`
-//     );
-//   }
-// }
-
-// async deleteById(id: string) {
-//   try {
-//     return await this.model.findByIdAndDelete(id).exec();
-//   } catch (error) {
-//     throw new Error(
-//       `Error while deleting parent with ID ${id}: ${error.message}`
-//     );
-//   }
-// }

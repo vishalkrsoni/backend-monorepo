@@ -8,6 +8,7 @@ import {
   mongoConnect,
   listenToRedisQueue,
   checkNetworkConnection,
+  listenToKafkaTopic,
 } from '@backend-monorepo/common';
 import { redisPubSubInstance } from './store';
 import { handleIncomingRedisEvent } from './utils/handleredis';
@@ -20,7 +21,7 @@ mongoConnect(DB_NAME, MONGO_URL);
 
 app.use(cookieParser()).use(express.json()).use(cors()).use(router);
 
-// listenToKafkaTopic('USER_CREATE');
+listenToKafkaTopic('USER_CREATE');
 
 // listening and handling redis events using callback function
 listenToRedisQueue(redisPubSubInstance, 'auth-queue', handleIncomingRedisEvent)

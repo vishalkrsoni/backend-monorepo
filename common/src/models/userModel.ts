@@ -8,6 +8,13 @@ import {
   logger,
 } from '@backend-monorepo/common';
 import { Schema, model, Types } from 'mongoose';
+const allowedUserTypes = [
+  'Student',
+  'Admin',
+  'Parent',
+  'Teacher',
+  'SuperAdmin',
+];
 
 const UserSchema = new Schema(
   {
@@ -17,6 +24,8 @@ const UserSchema = new Schema(
     },
     email: { type: String },
     phone: { type: String },
+    image: { type: String },
+
     userName: {
       type: String,
       required: true,
@@ -29,7 +38,7 @@ const UserSchema = new Schema(
     userType: {
       type: String,
       required: true,
-      enum: ['Student', 'Admin', 'Parent', 'Teacher', 'SuperAdmin'],
+      enum: allowedUserTypes,
     },
     userRoles: [
       {
@@ -44,7 +53,6 @@ const UserSchema = new Schema(
       type: Types.ObjectId,
       ref: 'School',
     },
-
     isDeleted: {
       type: Boolean,
       default: false,

@@ -1,8 +1,12 @@
-import { StudentController } from './controllers/student';
-import { ParentService } from './services/parent';
-import { StudentService } from './services/student';
+import { s3Client } from '@backend-monorepo/common';
+import { UserController } from './controllers/user';
+import { AwsService } from './services/aws';
+import { UserService } from './services/user';
+import { AwsController } from './controllers/aws';
 
-export const parentService = new ParentService();
+const userService = new UserService();
+export const userController = new UserController(userService);
 
-export const studentService = new StudentService(parentService);
-export const studentController = new StudentController();
+export const awsService = new AwsService(s3Client);
+
+export const awsController = new AwsController();

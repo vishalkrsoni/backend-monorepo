@@ -1,8 +1,13 @@
-import { kafka } from '../config/kafka';
-// import { logger } from './logger';
-import { logger } from '../store';
+import { KafkaClass } from '../clients';
+import { getKafkaConfig } from '../config/kafka';
+import { kafkaConsumer, logger } from '../store';
 
-const consumer = kafka.consumer({ groupId: 'my-kafka' });
+// const kafkaConfig = getKafkaConfig();
+// const kafka = new KafkaClass(kafkaConfig);
+// const kafkaClient = kafka.getClient();
+// const kafkaConsumer = kafka.getConsumer();
+// const kafkaProducer = kafka.getProducer();
+
 
 const msgToObj = (msg: string) => {
   try {
@@ -15,10 +20,10 @@ const msgToObj = (msg: string) => {
 
 export async function startKafkaConsumer(topic: string): Promise<any> {
   try {
-    await consumer.connect();
-    await consumer.subscribe({ topic, fromBeginning: true });
+    await kafkaConsumer.connect();
+    await kafkaConsumer.subscribe({ topic, fromBeginning: true });
 
-    await consumer.run({
+    await kafkaConsumer.run({
       eachMessage: async ({ topic, partition, message }) => {
         logger.info('received KAFKA message for topic : ${topic}');
         const obj = msgToObj(message.value.toString());

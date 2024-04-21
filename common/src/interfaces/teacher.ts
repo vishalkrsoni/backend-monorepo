@@ -7,6 +7,7 @@ export interface iTeacher extends Document {
   email?: string;
   school_id: Types.ObjectId;
   phone?: string;
+  image: string;
   dateOfBirth: Date;
   gender: genderType;
   password: string;

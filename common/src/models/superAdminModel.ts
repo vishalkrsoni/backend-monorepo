@@ -11,6 +11,9 @@ const superAdminSchema = new Schema<iSuperAdmin>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
     userType: {
       type: String,
       required: true,

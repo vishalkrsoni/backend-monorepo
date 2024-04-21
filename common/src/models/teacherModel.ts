@@ -6,6 +6,9 @@ const teacherSchema = new Schema<iTeacher>(
     name: { type: String },
     email: { type: String },
     phone: { type: String },
+    image: {
+      type: String,
+    },
     school_id: { type: Schema.Types.ObjectId, ref: 'School' },
     dateOfBirth: { type: Date },
     gender: { type: String, enum: ['male', 'female', 'other'] },
