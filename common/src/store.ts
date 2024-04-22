@@ -41,15 +41,15 @@ ENVIRONMENT == 'local'
 : new WinstonLogger(ENVIRONMENT);
 
 
-const redisPubSubConfig = getRedisPubSubConfig({
-  ENV_REDIS,
-  REDIS_HOST,
-  REDIS_AUTH,
-  REDIS_URL,
-  REDIS_PORT,
-  REDIS_URL_LOCAL,
-  REDIS_PORT_LOCAL,
-});
+// const redisPubSubConfig = getRedisPubSubConfig({
+//   ENV_REDIS,
+//   REDIS_HOST,
+//   REDIS_AUTH,
+//   REDIS_URL,
+//   REDIS_PORT,
+//   REDIS_URL_LOCAL,
+//   REDIS_PORT_LOCAL,
+// });
 
-const redisPubSub = new RedisPubSub(redisPubSubConfig);
-export const redisPubSubClient = redisPubSub.getPubSubInstance();
+// const redisPubSub = new RedisPubSub(redisPubSubConfig);
+// export const redisPubSubClient = redisPubSub.getPubSubInstance();
