@@ -33,7 +33,6 @@ export const scheduleCronJob = (
       }
     },
     {
-      // IST by default
       timezone: timezone,
     }
   );

@@ -1,7 +1,7 @@
 import {
-  createRedisCacheClient,
-  getRedisURL,
-  initializeRedisPubSub,
+  getCacheClient,
+  getRedisCacheURL,
+  getPubSubClient,
 } from '@backend-monorepo/common';
 import {
   ClassController,
@@ -22,15 +22,6 @@ import {
   ClassScheduleService,
 } from './services';
 
-const {
-  ENV_REDIS,
-  REDIS_URL,
-  REDIS_PORT,
-  REDIS_URL_LOCAL,
-  REDIS_PORT_LOCAL,
-  REDIS_AUTH,
-  REDIS_HOST,
-} = process.env;
 export const classService = new ClassService();
 export const classController = new ClassController();
 
@@ -53,22 +44,6 @@ export const subjectController = new SubjectController();
 export const classScheduleService = new ClassScheduleService();
 export const classScheduleController = new ClassScheduleController();
 
-export const redisCacheInstance = createRedisCacheClient(
-  getRedisURL(
-    ENV_REDIS,
-    REDIS_URL,
-    REDIS_PORT,
-    REDIS_URL_LOCAL,
-    REDIS_PORT_LOCAL,
-  ),
-);
+export const redisCacheClient = getCacheClient(getRedisCacheURL());
 
-export const redisPubSubInstance = initializeRedisPubSub({
-  REDIS_HOST,
-  REDIS_AUTH,
-  ENV_REDIS,
-  REDIS_URL,
-  REDIS_PORT,
-  REDIS_URL_LOCAL,
-  REDIS_PORT_LOCAL,
-});
+export const redisPubSubClient = getPubSubClient();

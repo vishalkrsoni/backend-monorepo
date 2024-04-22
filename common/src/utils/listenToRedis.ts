@@ -1,10 +1,11 @@
 import Redis from 'ioredis';
-import { startKafkaConsumer } from '../services/kafkaConsumer';
 import { logger } from '../store';
+import { consumeEventsFromKafka } from '../services';
+import { getKafkaConsumer } from '../clients';
 
 export const listenToRedisEvents = async (
   redisClient: Redis,
-  event: string
+  event: string,
 ) => {
   // Creating a dedicated subscriber connection
   const subscriber = redisClient.duplicate();
@@ -29,7 +30,7 @@ export const handleEventData = (event: string, EventData: any) => {
 
 export const listenToKafkaTopic = async (topic: string) => {
   try {
-    return await startKafkaConsumer(topic);
+    return await consumeEventsFromKafka(getKafkaConsumer(topic), topic);
   } catch (error) {
     logger.error('Error starting Kafka consumer:', error);
     process.exit(1);

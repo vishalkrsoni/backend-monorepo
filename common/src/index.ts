@@ -2,22 +2,17 @@ export * from './lib/common';
 
 export * from './helper/pubSub';
 
-export * from './config/redis';
+export * from './clients/index';
+export * from './config/index';
+export * from './clients/index';
 
-export * from './config/kafka';
-export * from './config/emailOptions';
-export * from './config/nodeMailerConfig';
 
 export * from './interfaces/index';
 
-export * from './services/mongoConnect';
-export * from './services/kafkaConsumer';
-export * from './services/kafkaProducer';
-export * from './services/cronJobSchedule';
-export * from './services/redisPubSub';
-export * from './services/baseService';
-export * from './services/isNetworkConnected';
-export * from './services/getInfoFromRequest';
+export * from './services/index';
+
+export * from './middlewares/isNetworkConnected';
+export * from './middlewares/getInfoFromRequest';
 
 export * from './utils/winstonLogger';
 export * from './utils/consoleLogger';

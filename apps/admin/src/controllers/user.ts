@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes as HTTPStatusCodes } from 'http-status-codes';
-import { redisPubSubInstance } from '../store';
+import { redisPubSubClient } from '../store';
 import { UserService } from '../services/user';
 const {
   OK,
