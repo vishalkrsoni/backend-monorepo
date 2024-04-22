@@ -1,49 +1,59 @@
 import {
-  getCacheClient,
-  getRedisCacheURL,
-  getPubSubClient,
-} from '@backend-monorepo/common';
-import {
-  ClassController,
-  SchoolController,
   UserController,
-  StudentController,
-  ParentController,
-  SubjectController,
-  ClassScheduleController,
+  SchoolController,
+  // ClassController,
+  // SubjectController,
+  // ClassScheduleController,
 } from './controllers';
+
 import {
   ClassService,
-  SchoolService,
-  SubjectService,
   UserService,
-  ParentService,
-  StudentService,
-  ClassScheduleService,
+  SchoolService,
+  // SubjectService,
+
+  // ClassScheduleService,
 } from './services';
 
-export const classService = new ClassService();
-export const classController = new ClassController();
-
-export const schoolService = new SchoolService();
+// export const classController = new ClassController();
 export const schoolController = new SchoolController();
-
-export const subjectService = new SubjectService();
-
+// export const subjectController = new SubjectController();
+// export const studentController = new StudentController();
 export const userController = new UserController(new UserService());
 
+export const classService = new ClassService();
+export const schoolService = new SchoolService();
 // export const parentService = new ParentService();
-export const parentService = new ParentService();
-export const studentService = new StudentService(parentService);
-export const studentController = new StudentController();
+// export const classScheduleService = new ClassScheduleService();
+// export const studentService = new StudentService(parentService);
+// export const subjectService = new SubjectService();
 
-export const parentController = new ParentController(parentService);
+// export const parentService = new ParentService();
 
-export const subjectController = new SubjectController();
+// export const parentService = new ParentService();
 
-export const classScheduleService = new ClassScheduleService();
-export const classScheduleController = new ClassScheduleController();
+// export const parentController = new ParentController(parentService);
 
-export const redisCacheClient = getCacheClient(getRedisCacheURL());
+// export const classScheduleController = new ClassScheduleController();
 
-export const redisPubSubClient = getPubSubClient();
+// const redisCache = new RedisCache(
+//   getRedisCacheConfig(
+//     ENV_REDIS,
+//     REDIS_URL,
+//     REDIS_PORT,
+//     REDIS_URL_LOCAL,
+//     REDIS_PORT_LOCAL,
+//   ),
+// );
+
+// export const redisCacheClient= redisCache.getClient()
+
+// export const redisPubSubInstance = initializeRedisPubSub({
+//   REDIS_HOST,
+//   REDIS_AUTH,
+//   ENV_REDIS,
+//   REDIS_URL,
+//   REDIS_PORT,
+//   REDIS_URL_LOCAL,
+//   REDIS_PORT_LOCAL,
+// });

@@ -67,11 +67,12 @@ export const getTimeInIST = (date: Date): { Day: string; Time: string } => {
   const day = daysOfWeek[date.getDay()];
   const dd = String(date.getDate()).padStart(2, '0');
   const mm = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
-  const yyyy = String(date.getFullYear()).slice(-2);
+  const yyyy = String(date.getFullYear());
+  // .slice(-2);
   const { hour, am_pm } = formatTime(date);
 
   return {
-    Day: `${dd} ${mm}'${yyyy}, ${day}`,
-    Time: `${hour}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')} ${am_pm}`,
+    Day: ` ${day} ${dd} ${mm} ${yyyy}`,
+    Time: `${hour}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}-${am_pm}`,
   };
 };

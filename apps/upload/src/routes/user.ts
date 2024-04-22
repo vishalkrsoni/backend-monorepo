@@ -1,5 +1,4 @@
 import express from 'express';
-import { ParentService } from '../services/parent';
 import { UserController } from '../controllers/user';
 import { UserService } from '../services/user';
 

@@ -5,6 +5,7 @@ import {
   CustomRequest,
   extractDeviceInfoMiddleware,
   extractLocationInfoMiddleware,
+  injectSchoolIdMiddleware,
   isAuthentic,
   verifyRole,
 } from '@backend-monorepo/common';
@@ -25,6 +26,7 @@ authRouter.post(
 );
 
 authRouter.use(isAuthentic).use(verifyRole('Super_Admin', 'Admin'));
+authRouter.use(injectSchoolIdMiddleware);
 
 authRouter.post('/register', userController.register.bind(userController));
 

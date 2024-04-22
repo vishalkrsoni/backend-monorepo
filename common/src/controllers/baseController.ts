@@ -1,82 +1,119 @@
-import { APIResponse } from '@backend-monorepo/common';
 import { Request, Response } from 'express';
+import { Document, Model, FilterQuery } from 'mongoose';
 
-interface BaseServiceInterface {
-  getAll(): Promise<any>;
-  getById(id: string): Promise<any>;
-  getByAttribute(attribute: string, value: any): Promise<any>;
-  updateById(id: string, data: any): Promise<any>;
-  deleteById(id: string): Promise<void | any>;
+import { APIResponse } from '../utils';
+import { HttpStatusCode } from 'axios';
+import { BaseServiceInterface } from '../services/baseService';
+
+export interface BaseControllerInterface<T> {
+  getAll(req: Request, res: Response): Promise<APIResponse | any | void | null>;
+  getById(
+    req: Request,
+    res: Response,
+  ): Promise<APIResponse | any | void | null>;
+  getByAttribute(
+    req: Request,
+    res: Response,
+  ): Promise<APIResponse | any | void | null>;
+  updateById(
+    req: Request,
+    res: Response,
+  ): Promise<APIResponse | any | void | null>;
+  deleteById(
+    req: Request,
+    res: Response,
+  ): Promise<APIResponse | any | void | null>;
 }
 
-export class BaseController<T extends BaseServiceInterface> {
+export class BaseController<T extends BaseServiceInterface>
+  implements BaseControllerInterface<T>
+{
   constructor(public service: T) {}
 
-  async getAll(req: Request, res: Response) {
+  async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const data = await this.service.getAll();
-      res.json(APIResponse.success(data, 'Found all requested users info'));
+      const response = await this.service.getAll();
+      res.status(response.statusCode).json(response);
     } catch (error) {
-      res.status(500).json(APIResponse.internalServerError(error.message));
+      console.error('Error occurred while fetching data:', error);
+      res
+        .status(HttpStatusCode.InternalServerError)
+        .json(
+          APIResponse.internalServerError(
+            'Server error occurred while fetching data',
+            error.message || error,
+          ),
+        );
     }
   }
 
-  async getById(req: Request, res: Response) {
-    const id = req.params.id;
+  async getById(req: Request, res: Response): Promise<void> {
     try {
-      const data = await this.service.getById(id);
-      if (data) {
-        res.json(APIResponse.success(data, 'Data found by id successfully'));
-      } else {
-        res
-          .status(404)
-          .json(
-            APIResponse.notFound(
-              'Could not find any entry with the requested id',
-            ),
-          );
-      }
+      const id = req.params.id;
+      const response = await this.service.getById(id);
+      res.status(response.statusCode).json(response);
     } catch (error) {
-      res.status(500).json(APIResponse.internalServerError(error.message));
+      console.error('Error occurred while fetching data by ID:', error);
+      res
+        .status(HttpStatusCode.InternalServerError)
+        .json(
+          APIResponse.internalServerError(
+            'Server error occurred while fetching data by ID',
+            error.message || error,
+          ),
+        );
     }
   }
 
-  async getByAttribute(req: Request, res: Response) {
-    const { attribute, value } = req.body;
+  async getByAttribute(req: Request, res: Response): Promise<void> {
     try {
-      if (!attribute || !value) {
-        return res
-          .status(400)
-          .json(APIResponse.badRequest('Attribute and value must be provided'));
-      }
-      const data = await this.service.getByAttribute(attribute, value);
-      if (data) {
-        res.json(APIResponse.success(data));
-      } else {
-        res.status(404).json(APIResponse.notFound());
-      }
+      const response = await this.service.getByAttribute(req.body);
+      res.status(response.statusCode).json(response);
     } catch (error) {
-      res.status(500).json(APIResponse.internalServerError(error.message));
+      console.error('Error occurred while fetching data by attribute:', error);
+      res
+        .status(HttpStatusCode.InternalServerError)
+        .json(
+          APIResponse.internalServerError(
+            'Server error occurred while fetching data by attribute',
+            error.message || error,
+          ),
+        );
     }
   }
 
-  async updateById(req: Request, res: Response) {
-    const id = req.params.id;
+  async updateById(req: Request, res: Response): Promise<void> {
     try {
-      const data = await this.service.updateById(id, req.body);
-      res.json(APIResponse.success(data, 'Updated successfully'));
+      const response = await this.service.updateById(req.body);
+      res.status(response.statusCode).json(response);
     } catch (error) {
-      res.status(500).json(APIResponse.internalServerError(error.message));
+      console.error('Error occurred while updating data by ID:', error);
+      res
+        .status(HttpStatusCode.InternalServerError)
+        .json(
+          APIResponse.internalServerError(
+            'Server error occurred while updating data by ID',
+            error.message || error,
+          ),
+        );
     }
   }
 
-  async deleteById(req: Request, res: Response) {
-    const id = req.params.id;
+  async deleteById(req: Request, res: Response): Promise<void> {
     try {
-      await this.service.deleteById(id);
-      res.json(APIResponse.success({ message: 'Deleted successfully' }));
+      const id = req.params.id;
+      const response = await this.service.deleteById(id);
+      res.status(response.statusCode).json(response);
     } catch (error) {
-      res.status(500).json(APIResponse.internalServerError(error.message));
+      console.error('Error occurred while deleting data by ID:', error);
+      res
+        .status(HttpStatusCode.InternalServerError)
+        .json(
+          APIResponse.internalServerError(
+            'Server error occurred while deleting data by ID',
+            error.message || error,
+          ),
+        );
     }
   }
 }

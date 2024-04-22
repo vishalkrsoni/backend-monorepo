@@ -1,78 +1,119 @@
-import { Model, Document, FilterQuery } from 'mongoose';
+import { Document, Model, FilterQuery } from 'mongoose';
+import { APIResponse } from '../utils';
 
-export interface BaseServiceInterface<T extends Document> {
-  getAll(): Promise<T[] | any>;
-  getById(id: string): Promise<T | null | any>;
-  getByAttribute(attribute: string, value: any): Promise<T | null | any>;
-  updateById(id: string, data: Partial<T>): Promise<T | null | any>;
-  deleteById(id: string): Promise<void | any>;
+export interface BaseServiceInterface {
+  getAll(): Promise<APIResponse>;
+  getById(id: string): Promise<APIResponse>;
+  getByAttribute(body: any): Promise<APIResponse>;
+  updateById(body: any): Promise<APIResponse>;
+  deleteById(id: string): Promise<APIResponse>;
 }
 
 export class BaseUserService<T extends Document>
-  implements BaseServiceInterface<T>
+  implements BaseServiceInterface
 {
   constructor(public model: Model<T>) {}
 
-  async getAll(): Promise<T[]> {
+  async getAll(): Promise<APIResponse> {
     try {
-      const documents = await this.model.find().exec();
-      return documents;
+      const response = await this.model.find().exec();
+      return APIResponse.success('Success fetching data', response);
     } catch (error) {
-      throw new Error(`Failed to retrieve all documents: ${error.message}`);
-    }
-  }
-
-  async getById(id: string): Promise<T | null> {
-    try {
-      const document = await this.model.findById(id).exec();
-      return document;
-    } catch (error) {
-      throw new Error(
-        `Failed to retrieve document with ID ${id}: ${error.message}`,
+      console.error('Error occurred while fetching data:', error);
+      return APIResponse.internalServerError(
+        'Internal Server Error Occurred. Try later',
+        error.message || error,
       );
     }
   }
 
-  async getByAttribute(attribute: string, value: any): Promise<T | null> {
+  async getById(id: string): Promise<APIResponse> {
     try {
+      if (!id) {
+        return APIResponse.badRequest('ID must be provided');
+      }
+      const data = await this.model.findById(id).exec();
+      if (!data) {
+        return APIResponse.notFound(`Data not found for ID: ${id}`);
+      }
+      return APIResponse.success(`Success fetching data for ID: ${id}`, data);
+    } catch (error) {
+      console.error('Error occurred while fetching data by ID:', error);
+      return APIResponse.internalServerError(
+        'Internal Server Error Occurred. Try later',
+        error.message || error,
+      );
+    }
+  }
+
+  async getByAttribute(body: any): Promise<APIResponse> {
+    try {
+      const { attribute, value } = body;
       if (!attribute || !value) {
-        throw new Error('Attribute and value must be provided');
+        return APIResponse.badRequest('Attribute and value must be provided');
       }
       const filter = { [attribute]: value } as FilterQuery<T>;
-      const document = await this.model.findOne(filter).exec();
-      return document;
+      const data = await this.model.findOne(filter).exec();
+      return APIResponse.success(
+        `Success fetching data for ${attribute}: ${value}`,
+        data,
+      );
     } catch (error) {
-      throw new Error(
-        `Failed to retrieve document by attribute: ${error.message}`,
+      console.error('Error occurred while fetching data by attribute:', error);
+      return APIResponse.internalServerError(
+        'Internal Server Error Occurred. Try later',
+        error.message || error,
       );
     }
   }
 
-  async updateById(id: string, data: Partial<T>): Promise<T | null> {
+  async updateById(body: any): Promise<APIResponse> {
     try {
-      if (!id || !data) {
-        throw new Error('ID and data must be provided');
+      const { id, data } = body;
+      if (!id) {
+        return APIResponse.badRequest('ID must be provided');
       }
+
+      if (!data) {
+        return APIResponse.badRequest('Data must be provided');
+      }
+
       const updatedDocument = await this.model
         .findByIdAndUpdate(id, data, { new: true })
         .exec();
-      return updatedDocument;
+
+      if (!updatedDocument) {
+        return APIResponse.notFound(`Data not found for ID: ${id}`);
+      }
+
+      return APIResponse.success(
+        `Success updating data for ID: ${id}`,
+        updatedDocument,
+      );
     } catch (error) {
-      throw new Error(
-        `Failed to update document with ID ${id}: ${error.message}`,
+      console.error(`Error occurred while updating data`, error);
+      return APIResponse.internalServerError(
+        `Failed to update document ${error.message || error}`,
+        error,
       );
     }
   }
 
-  async deleteById(id: string): Promise<void> {
+  async deleteById(id: string): Promise<APIResponse> {
     try {
       if (!id) {
-        throw new Error('ID must be provided');
+        return APIResponse.badRequest('ID must be provided');
       }
-      await this.model.findByIdAndDelete(id).exec();
+      const deletedDocument = await this.model.findByIdAndDelete(id).exec();
+      if (!deletedDocument) {
+        return APIResponse.notFound(`Data not found for ID: ${id}`);
+      }
+      return APIResponse.success(`Success deleting data for ID: ${id}`, null);
     } catch (error) {
-      throw new Error(
-        `Failed to delete document with ID ${id}: ${error.message}`,
+      console.error(`Error occurred while deleting data for ID: ${id}:`, error);
+      return APIResponse.internalServerError(
+        `Failed to delete document with ID ${id}: ${error.message || error}`,
+        error,
       );
     }
   }

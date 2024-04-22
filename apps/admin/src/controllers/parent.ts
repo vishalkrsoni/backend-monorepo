@@ -1,4 +1,4 @@
-import { ParentService } from '../services/parent';
-import { BaseController } from '@backend-monorepo/common';
+// // import { ParentService } ../assets/services/parentparent';
+// import { BaseController } from '@backend-monorepo/common';
 
-export class ParentController extends BaseController<ParentService> {}
+// export class ParentController extends BaseController<ParentService> {}

@@ -1,4 +1,9 @@
-import { Class, BaseUserService, iClass } from '@backend-monorepo/common';
+import {
+  Class,
+  BaseUserService,
+  iClass,
+  APIResponse,
+} from '@backend-monorepo/common';
 import { Types } from 'mongoose';
 
 export class ClassService extends BaseUserService<iClass> {
@@ -7,38 +12,39 @@ export class ClassService extends BaseUserService<iClass> {
   }
 
   async addClass(body: any) {
-    console.log('body is:',body)
+    console.log('body is:', body);
     try {
       const newClass = await this.model.create({ ...body });
-      return newClass;
-    } catch (err) {
-      throw new Error(`Failed to add class: ${err.message}`);
+      return newClass
+        ? APIResponse.success(`Success adding data`, newClass)
+        : APIResponse.expectationFailed(`some error occurred`, newClass);
+    } catch (error) {
+      return APIResponse.internalServerError(
+        `Internal Server Error Occurred. Try later`,
+        error,
+      );
     }
   }
 
-  async getByAttribute(attribute: string, value: any) {
+  async getByAttribute(body: any) {
     try {
-      const result = await this.model.findOne({ [attribute]: value }).exec();
-      return result;
-    } catch (err) {
-      throw new Error(`Failed to get class by attribute: ${err.message}`);
-    }
-  }
+      const { attribute, value } = body;
+      const data = await this.model.findOne({ [attribute]: value }).exec();
+      return APIResponse.success(`Success finding data`, data);
+    } catch (error) {
+      return APIResponse.internalServerError(
+        `Failed to get class by attribute: ${error.message}`,
+        error,
+      );
 
-  async updateById(id: string, data: Partial<iClass>) {
-    try {
-      const updatedClass = await this.model
-        .findByIdAndUpdate(id, data, { new: true })
-        .exec();
-      return updatedClass;
-    } catch (err) {
-      throw new Error(`Failed to update class by id: ${err.message}`);
+      // throw new Error(`Failed to get class by attribute: ${err.message}`);
     }
   }
 
   async deleteById(id: string) {
     try {
-      await this.model.findByIdAndDelete(id).exec();
+      const data = await this.model.findByIdAndDelete(id).exec();
+      return APIResponse.success(`success deleting`, data);
     } catch (err) {
       throw new Error(`Failed to delete class by id: ${err.message}`);
     }
