@@ -8,8 +8,11 @@ import {
   mongoConnect,
   listenToRedisQueue,
   checkNetworkConnection,
+  consumeEventsFromKafka,
 } from '@backend-monorepo/common';
-import { redisPubSubClient } from './store';
+import { 
+  // kafkaConsumer, 
+  pubSubClient } from './store';
 import { handleIncomingRedisEvent } from './utils/handleredis';
 
 const { MONGO_URL, DB_NAME, EVENT_HANDLER_PORT } = process.env;
@@ -20,10 +23,9 @@ mongoConnect(DB_NAME, MONGO_URL);
 
 app.use(cookieParser()).use(express.json()).use(cors()).use(router);
 
-// listenToKafkaTopic('USER_CREATE');
+// (async () => await consumeEventsFromKafka(kafkaConsumer, `USER_CREATE`))();
 
-// listening and handling redis events using callback function
-listenToRedisQueue(redisPubSubClient, 'auth-queue', handleIncomingRedisEvent)
+listenToRedisQueue(pubSubClient, 'auth-queue', handleIncomingRedisEvent)
   .then(() => {
     logger.info('Listening to Redis : auth-queue');
   })
@@ -34,7 +36,7 @@ listenToRedisQueue(redisPubSubClient, 'auth-queue', handleIncomingRedisEvent)
 app
   .listen(EVENT_HANDLER_PORT, () =>
     logger.info(
-      `event-handler started : http://localhost:${EVENT_HANDLER_PORT}`
-    )
+      `event-handler started : http://localhost:${EVENT_HANDLER_PORT}`,
+    ),
   )
   .on('error', logger.error);

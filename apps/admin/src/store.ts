@@ -1,4 +1,12 @@
 import {
+  getCacheClient,
+  getKafkaConsumer,
+  getKafkaProducer,
+  getNrpConfig,
+  getPubSubClient,
+  getRedisCacheURL,
+} from '@backend-monorepo/common';
+import {
   UserController,
   SchoolController,
   // ClassController,
@@ -36,24 +44,9 @@ export const schoolService = new SchoolService();
 
 // export const classScheduleController = new ClassScheduleController();
 
-// const redisCache = new RedisCache(
-//   getRedisCacheConfig(
-//     ENV_REDIS,
-//     REDIS_URL,
-//     REDIS_PORT,
-//     REDIS_URL_LOCAL,
-//     REDIS_PORT_LOCAL,
-//   ),
-// );
+export const cacheClient = getCacheClient(getRedisCacheURL());
 
-// export const redisCacheClient= redisCache.getClient()
+export const pubSubClient = getPubSubClient();
 
-// export const redisPubSubInstance = initializeRedisPubSub({
-//   REDIS_HOST,
-//   REDIS_AUTH,
-//   ENV_REDIS,
-//   REDIS_URL,
-//   REDIS_PORT,
-//   REDIS_URL_LOCAL,
-//   REDIS_PORT_LOCAL,
-// });
+// export const kafkaProducer = getKafkaProducer();
+

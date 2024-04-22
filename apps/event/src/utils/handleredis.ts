@@ -24,7 +24,7 @@ export const handleIncomingRedisEvent = async (event: EventMessage) => {
     case 'TEACHER_CREATE':
       model = Teacher;
       break;
-    case 'SUPER-ADMIN_CREATE':
+    case 'SUPER_ADMIN_CREATE':
       model = Admin;
       break;
     default:

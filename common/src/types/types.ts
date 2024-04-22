@@ -22,7 +22,7 @@ export type StudentActionTypes =
 
 // Action types for admins
 export type AdminActionTypes =
-  | 'SUPER-ADMIN_CREATE'
+  | 'SUPER_ADMIN_CREATE'
   | 'ADMIN_CREATE'
   | 'ADMIN_UPDATE'
   | 'ADMIN_LOGGED'

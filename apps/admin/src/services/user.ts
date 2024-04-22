@@ -7,12 +7,24 @@ import {
   APIResponse,
   BaseUserService,
   verifyRole,
+  publishEventToKafka,
+  EventTypes,
+  EventMessage,
+  getPubSubClient,
+  getCacheClient,
+  getRedisCacheURL,
+  consumeEventsFromKafka,
 } from '@backend-monorepo/common';
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../utils/accessToken';
 import { UserValidator } from '../validators/userValidator';
+import {
+  cacheClient,
+  // kafkaProducer,
+  pubSubClient,
+} from '../store';
 
 export class UserService extends BaseUserService<iUser> {
   constructor() {
@@ -86,7 +98,7 @@ export class UserService extends BaseUserService<iUser> {
 
       await newAdminUser.save();
 
-      const newEvent = {
+      const newEvent: EventMessage = {
         type: 'SUPER_ADMIN_CREATE',
         data: {
           userId: newAdminUser._id,
@@ -95,6 +107,10 @@ export class UserService extends BaseUserService<iUser> {
         },
         createdAt: new Date(),
       };
+
+      (await pubSubClient).publish('USER_CREATE', JSON.stringify(newEvent));
+
+      // publishEventToKafka(kafkaProducer, 'USER_CREATE', newEvent);
 
       return APIResponse.created('Successfully added super admin.', {
         ...newEvent.data,

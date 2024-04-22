@@ -1,21 +1,22 @@
 import { Producer, Consumer } from 'kafkajs';
 import { logger } from '../store';
 import { parseMessageToObject } from '../utils/parseMessage';
+import { EventMessage } from '../types/types';
 
 export const publishEventToKafka = async (
   kafkaProducer: Producer,
   topic: string,
-  event: Event,
+  eventMessage: EventMessage,
 ): Promise<void> => {
   try {
     await kafkaProducer.connect();
     const published = await kafkaProducer.send({
       topic,
-      messages: [{ value: JSON.stringify(event) }],
+      messages: [{ value: JSON.stringify(eventMessage) }],
     });
     if (!published)
       logger.error('Could not publish event due to  unknown failure');
-    logger.info('Message sent successfully to Kafka:', event.toString());
+    logger.info('Message sent successfully to Kafka:', eventMessage);
   } catch (error) {
     logger.error('Error while publishing event to Kafka:', error);
     throw error;

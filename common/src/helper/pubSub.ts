@@ -51,7 +51,6 @@ export const publishMessageToQueue = async (
 
 export const listenToRedisQueue = async (
   redisPubSubInstance: Promise<NodeRedisPubSub>,
-
   queueName: string,
   callback: (event: any) => Promise<void>
 ) => {
@@ -60,7 +59,7 @@ export const listenToRedisQueue = async (
 
     await redisPubSub.on(queueName, async (message: any) => {
       const event = JSON.parse(message);
-      logger.info(`Received message from queue ${queueName}:`, event);
+      logger.info(`Received message from pubsub  queue ${queueName}:`, event);
       // Executing the callback function with the event
       await callback(event);
     });
