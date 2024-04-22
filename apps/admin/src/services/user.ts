@@ -14,6 +14,8 @@ import {
   getCacheClient,
   getRedisCacheURL,
   consumeEventsFromKafka,
+  publishToRedisQueue,
+  emitMessageToRedisTopic,
 } from '@backend-monorepo/common';
 import {
   generateAccessToken,
@@ -108,7 +110,13 @@ export class UserService extends BaseUserService<iUser> {
         createdAt: new Date(),
       };
 
-      (await pubSubClient).publish('USER_CREATE', JSON.stringify(newEvent));
+      await publishToRedisQueue(
+        pubSubClient,
+        'auth-queue',
+        JSON.stringify(newEvent),
+      );
+
+      // await emitMessageToRedisTopic(cacheClient, 'auth-queue', newEvent);
 
       // publishEventToKafka(kafkaProducer, 'USER_CREATE', newEvent);
 

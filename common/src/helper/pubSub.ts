@@ -18,21 +18,8 @@ export const emitMessageToRedisTopic = async (
   }
 };
 
-// export const listenToRedisTopic = async (
-//   redisPubSub: Redis,
-//   topic: string,
-//   callBack: CallableFunction
-// ) => {
-//   try {
-//     await redisPubSub.on(topic, callBack);
-//   } catch (error) {
-//     logger.error(`Error while listening to: ${topic}`, error);
-//   }
-// };
-
-export const publishMessageToQueue = async (
+export const publishToRedisQueue = async (
   redisPubSubInstance: Promise<NodeRedisPubSub>,
-
   queueName: string,
   message: string
 ) => {

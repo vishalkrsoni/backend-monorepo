@@ -4,7 +4,6 @@ import {
   APIResponse,
   BaseController,
   logger,
-  publishMessageToQueue,
   verifyRole,
 } from '@backend-monorepo/common';
 import { HttpStatusCode } from 'axios';
