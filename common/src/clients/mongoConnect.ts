@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { logger } from '../store';
 
-// 2 minutes in milliseconds
 const retryDelay = 5 * 1000;
 
 export async function mongoConnect(DB_NAME: string, MONGO_URL: string) {
@@ -11,7 +10,7 @@ export async function mongoConnect(DB_NAME: string, MONGO_URL: string) {
     await mongoose.connect(MONGO_URL, {
       dbName: DB_NAME,
       maxPoolSize: 150,
-      connectTimeoutMS: 5000, // Timeout after 5 seconds
+      connectTimeoutMS: retryDelay,
     });
     logger.info(`Connected to Mongo_DB`);
     logger.debug(`Mongo URL : ${MONGO_URL}`);
@@ -21,7 +20,7 @@ export async function mongoConnect(DB_NAME: string, MONGO_URL: string) {
     retries++;
     logger.error(
       `Error Connecting to DB. Tried ${retries} times: `,
-      err.message
+      err.message,
     );
 
     // Retry logic with exponential backoff (optional)

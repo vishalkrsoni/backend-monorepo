@@ -11,15 +11,15 @@ const errorFormat = winston.format.combine(
       message += `\n${info.stack}`;
     }
     return message;
-  })
+  }),
 );
 
 const infoFormat = winston.format.combine(
   winston.format.colorize({ level: true, all: true }), // Colorize only info and above
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.printf(
-    (info) => `${info.timestamp} - [${info.level}] ${info.message}`
-  )
+    (info) => `${info.timestamp} - [${info.level}] ${info.message}`,
+  ),
 );
 
 const objectFormat = winston.format.printf((info) => {
@@ -59,7 +59,7 @@ export class WinstonLogger {
                 info.message = objectFormat.transform(info.message);
               }
               return info;
-            })()
+            })(),
           ),
         }),
       ],

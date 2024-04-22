@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../store';
-import { mongoConnect } from '../services/mongoConnect';
+import { mongoConnect } from '../clients/mongoConnect';
 
 let isConnected = false;
 
@@ -9,7 +9,7 @@ export const dbPing = async (
   res: Response,
   mongo_url: string,
   db_name: string,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     if (isConnected) {

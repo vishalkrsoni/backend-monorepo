@@ -1,4 +1,4 @@
-import { ConsoleLogger, WinstonLogger } from './utils';
+import { ConsoleLogger, WinstonLogger } from './clients';
 
 const { ENVIRONMENT } = process.env;
 
