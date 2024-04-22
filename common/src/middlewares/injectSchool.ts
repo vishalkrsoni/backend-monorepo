@@ -8,7 +8,7 @@ export const injectSchoolIdMiddleware = (
   next: NextFunction,
 ) => {
   const { school_id } = req.user;
-  const isSuperAdmin = req.user.roles.includes('Super_Admin');
+  const isSuperAdmin = req.user.roles.includes('SuperAdmin');
   if (!isSuperAdmin && !school_id) {
     return res
       .status(200)
