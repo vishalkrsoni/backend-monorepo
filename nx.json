@@ -23,18 +23,8 @@
         "previewTargetName": "preview"
       }
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
-    }
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
+    { "plugin": "@nx/jest/plugin", "options": { "targetName": "test" } }
   ],
-  "nxCloudAccessToken": "ZjI4Y2NiYmItNTM4OC00ZWYyLTg3ZTktNTM1ZjI2NWU1ODcwfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "YjgzNWUzYzctYWRiZC00YTBmLTlkOWUtNDE4MTBmZGJhMjZifHJlYWQtd3JpdGU="
 }
